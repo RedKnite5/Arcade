@@ -1,0 +1,20 @@
+
+.chess {
+    background-color: grey;
+}
+
+#board {
+    height: 90vh;
+    max-height: 95vw;
+    width: 90vh;
+    max-width: 95vw;
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    margin: auto;
+}
+
+.chess-game {
+    display: flex;
+    flex-direction: row;
+}
