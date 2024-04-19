@@ -266,9 +266,7 @@ function rook_checking(match1, match2, diff1, diff2, dest_el, id_func) {
                 return false;
             }
         }
-        if (dest_el.hasChildNodes()) {
-            take_piece(dest_el.firstChild);
-        }
+        try_take(dest_el);
         return true;
     }
     return null;
@@ -278,32 +276,56 @@ function bishop_mv(data, dest) {
     const invletters = {a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7};
     const dest_el = document.getElementById(dest);
     const origin_file = invletters[data.origin[0]];
-    const dest_file = invletters[dest[0]];
     const origin_rank = data.origin[1];
-    const dest_rank = dest[1];
+    const piece_id = data.id;
+    const piece_color = piece_id[3];
+    const other_piece_color = get_dest_color(dest_el);  // "l", "d", or null
 
-    if (check_capture_same_color(data.id, dest)) {
+    const possible = [];
+
+    let x = origin_file;
+    let y = parseInt(origin_rank);
+
+    add_diag(x, y, 1, 1, piece_color, possible);
+    add_diag(x, y, 1, -1, piece_color, possible);
+    add_diag(x, y, -1, 1, piece_color, possible);
+    add_diag(x, y, -1, -1, piece_color, possible);
+
+    console.log(possible);
+    console.log(dest);
+    if (possible.includes(dest) && other_piece_color !== piece_color) {
+        try_take(dest_el);
+        return true;
+    }
+    return false;
+}
+
+function get_dest_color(dest_el) {
+    if (dest_el.hasChildNodes()) {
+        return dest_el.firstChild.id[3];
+    }
+    return null;
+}
+
+function add_diag(x, y, x_dir, y_dir, color, arr) {
+    const letters = "abcdefgh";
+    let open = true;
+    for (let i=1; i<8 && open; i++) {
+        let test_id_up_right = letters[x + x_dir*i] + (y + y_dir*i).toString();
+        open = free_square(test_id_up_right, color);
+        arr[arr.length] = test_id_up_right;
+    }
+}
+
+function free_square(id, piece_color) {
+    const test_up = document.getElementById(id);
+    if (test_up === null) {
         return false;
     }
-
-    if (dest_file - origin_file === dest_rank - origin_rank) {
-        const start = min(dest_file, origin_file);
-        const end = max(diff1, diff2);
-        //console.log(start);
-        //console.log(end);
-        for (let i=start; i<end; i++) {
-            let test_id = id_func(match1, i);
-            //console.log(test_id);
-            let test_el = document.getElementById(test_id);
-            //console.log(test_el);
-            if (test_el.hasChildNodes() && i !== start) {
-                return false;
-            }
-        }
-        if (dest_el.hasChildNodes()) {
-            take_piece(dest_el.firstChild);
-        }
+    if (test_up.hasChildNodes()) {
+        return false;
     }
+    return true;
 }
 
 function check_capture_same_color(data_id, dest) {
@@ -312,6 +334,12 @@ function check_capture_same_color(data_id, dest) {
         if (dest_el.firstChild.id[3] === data_id[3]) {
             return true;
         }
+    }
+}
+
+function try_take(square) {
+    if (square.hasChildNodes()) {
+        take_piece(square.firstChild);
     }
 }
 
