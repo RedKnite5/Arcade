@@ -213,91 +213,49 @@ function pawn_mv(data, dest) {
 }
 
 function rook_mv(data, dest) {
-    const invletters = {a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7};
     const dest_el = get(dest);
-    const origin_file = invletters[data.origin[0]];
-    const dest_file = invletters[dest[0]];
-    const origin_rank = data.origin[1];
-    const dest_rank = dest[1];
+    const piece_id = data.id;
+    const piece_color = piece_id[3];
 
-    if (check_capture_same_color(data.id, dest)) {
-        return false;
-    }
+    const available = [];
 
-    const test1 = rook_checking(
-        origin_rank, dest_rank,
-        origin_file, dest_file,
-        dest_el, vert_id_rook
-    );
-    if (test1 === true) {
+    [x, y] = parse_data(data);
+
+    available.push(...add_dir(x, y, 1, 0));
+    available.push(...add_dir(x, y, -1, 0));
+    available.push(...add_dir(x, y, 0, 1));
+    available.push(...add_dir(x, y, 0, -1));
+
+    const possible = filter_color(available, piece_color);
+
+    //console.log(possible);
+    //console.log(dest);
+    if (possible.includes(get(dest))) {
+        try_take(dest_el);
         return true;
-    } else if (test1 === false) {
-        return false;
-    }
-
-    const test2 = rook_checking(
-        origin_file, dest_file,
-        origin_rank, dest_rank,
-        dest_el, hori_id_rook
-    );
-    if (test2 === true) {
-        return true;
-    } else if (test2 === false) {
-        return false;
     }
     return false;
 }
 
-function vert_id_rook(origin_rank, i) {
-    return vert_id = letters[i] + origin_rank;
-}
-function hori_id_rook(origin_file, i) {
-    return letters[origin_file] + i.toString();
-}
-
-function rook_checking(match1, match2, diff1, diff2, dest_el, id_func) {
-    if (match1 === match2) {
-        const start = min(diff1, diff2);
-        const end = max(diff1, diff2);
-        //console.log(start);
-        //console.log(end);
-        for (let i=start; i<end; i++) {
-            let test_id = id_func(match1, i);
-            //console.log(test_id);
-            let test_el = get(test_id);
-            //console.log(test_el);
-            if (test_el.hasChildNodes() && i !== start) {
-                return false;
-            }
-        }
-        try_take(dest_el);
-        return true;
-    }
-    return null;
-}
-
 function bishop_mv(data, dest) {
-    const invletters = {a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7};
     const dest_el = get(dest);
-    const origin_file = invletters[data.origin[0]];
-    const origin_rank = data.origin[1];
     const piece_id = data.id;
     const piece_color = piece_id[3];
-    const other_piece_color = get_dest_color(dest_el);  // "l", "d", or null
 
-    const possible = [];
+    const available = [];
 
-    let x = origin_file;
-    let y = parseInt(origin_rank);
+    [x, y] = parse_data(data);
 
-    possible.push(...add_diag(x, y, 1, 1, piece_color));
-    possible.push(...add_diag(x, y, 1, -1, piece_color));
-    possible.push(...add_diag(x, y, -1, 1, piece_color));
-    possible.push(...add_diag(x, y, -1, -1, piece_color));
+    available.push(...add_dir(x, y, 1, 1));
+    available.push(...add_dir(x, y, 1, -1));
+    available.push(...add_dir(x, y, -1, 1));
+    available.push(...add_dir(x, y, -1, -1));
+
+    const possible = filter_color(available, piece_color);
 
     //console.log(possible);
     //console.log(dest);
-    if (possible.includes(dest) && other_piece_color !== piece_color) {
+    if (possible.includes(get(dest))) {
         try_take(dest_el);
         return true;
     }
@@ -311,29 +269,26 @@ function get_dest_color(dest_el) {
     return null;
 }
 
-function add_diag(x, y, x_dir, y_dir, color) {
+function add_dir(x, y, x_dir, y_dir) {
     const arr = [];
     let open = true;
     for (let i=1; i<8 && open; i++) {
-        let test_id_up_right = letters[x + x_dir*i] + (y + y_dir*i).toString();
-        open = free_square(test_id_up_right, color);
-        arr.push(test_id_up_right);
+        let next_id = letters[x + x_dir*i] + (y + y_dir*i).toString();
+        let next = get(next_id);
+        open = free_square(next);
+        arr.push(next);
     }
     return arr;
 }
 
 function knight_mv(data, dest) {
-    const invletters = {a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7};
     const dest_el = get(dest);
-    const origin_file = invletters[data.origin[0]];
-    const origin_rank = data.origin[1];
     const piece_id = data.id;
     const piece_color = piece_id[3];
 
-    const available = [];
+    [x, y] = parse_data(data);
 
-    let x = origin_file;
-    let y = parseInt(origin_rank);
+    const available = [];
 
     available.push(...knight_available(x, y, 1, 1));
     available.push(...knight_available(x, y, 1, -1));
@@ -342,16 +297,7 @@ function knight_mv(data, dest) {
 
     //console.log("av: ", available);
     
-    const possible = [];
-    for (const square of available) {
-        if (!square.hasChildNodes()) {
-            possible.push(square);
-            continue;
-        }
-        if (square.firstChild.id[3] !== piece_color) {
-            possible.push(square);
-        }
-    }
+    const possible = filter_color(available, piece_color);
     //console.log("pos: ", possible);
 
     if (possible.includes(get(dest))) {
@@ -360,6 +306,23 @@ function knight_mv(data, dest) {
     }
     return false;
 
+}
+
+function filter_color(available, piece_color) {
+    const possible = [];
+    for (const square of available) {
+        if (square === null) {
+            continue;
+        }
+        if (!square.hasChildNodes()) {
+            possible.push(square);
+            continue;
+        }
+        if (square.firstChild.id[3] !== piece_color) {
+            possible.push(square);
+        }
+    }
+    return possible;
 }
 
 function knight_available(x, y, dir1, dir2) {
@@ -379,16 +342,23 @@ function knight_available(x, y, dir1, dir2) {
     return result;
 }
 
-
-function free_square(id, piece_color) {
-    const test_up = get(id);
-    if (test_up === null) {
+function free_square(test_next) {
+    if (test_next === null) {
         return false;
     }
-    if (test_up.hasChildNodes()) {
+    if (test_next.hasChildNodes()) {
         return false;
     }
     return true;
+}
+
+function parse_data(data) {
+    const invletters = {a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7};
+    const origin_file = invletters[data.origin[0]];
+    const origin_rank = data.origin[1];
+    let x = origin_file;
+    let y = parseInt(origin_rank);
+    return [x, y];
 }
 
 function check_capture_same_color(data_id, dest) {
