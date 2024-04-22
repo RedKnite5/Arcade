@@ -115,7 +115,6 @@ function add_chess_piece(squareid, file) {
     square.appendChild(image);
 }
 
-
 function allow_drop(event) {
     event.preventDefault();
 }
@@ -211,7 +210,7 @@ function pawn_mv(data, dest) {
 
     possible.push(...no_capture);
 
-    return may_move_and_take(possible, dest_el);
+    return check_move_and_take(possible, dest_el);
 }
 
 function pawn_options(x, y, dir) {
@@ -225,15 +224,8 @@ function pawn_options(x, y, dir) {
         squares.push(get(id));
     }
 
-    const result = [];
-    for (const square of squares) {
-        if (square !== null) {
-            result.push(square);
-        }
-    }
-    return result;
+    return filter_exists(squares);
 }
-
 
 function rook_mv(data, dest) {
     const dest_el = get(dest);
@@ -253,11 +245,7 @@ function rook_mv(data, dest) {
 
     //console.log(possible);
     //console.log(dest);
-    if (possible.includes(dest_el)) {
-        try_take(dest_el);
-        return true;
-    }
-    return false;
+    return check_move_and_take(possible, dest_el);
 }
 
 function bishop_mv(data, dest) {
@@ -278,11 +266,7 @@ function bishop_mv(data, dest) {
 
     //console.log(possible);
     //console.log(dest);
-    if (possible.includes(dest_el)) {
-        try_take(dest_el);
-        return true;
-    }
-    return false;
+    return check_move_and_take(possible, dest_el);
 }
 
 function get_dest_color(dest_el) {
@@ -323,12 +307,7 @@ function knight_mv(data, dest) {
     const possible = filter_color(available, piece_color);
     //console.log("pos: ", possible);
 
-    if (possible.includes(dest_el)) {
-        try_take(dest_el);
-        return true;
-    }
-    return false;
-
+    return check_move_and_take(possible, dest_el);
 }
 
 function knight_available(x, y, dir1, dir2) {
@@ -371,11 +350,7 @@ function queen_mv(data, dest) {
 
     //console.log(possible);
     //console.log(dest);
-    if (possible.includes(dest_el)) {
-        try_take(dest_el);
-        return true;
-    }
-    return false;
+    return check_move_and_take(possible, dest_el);
 }
 
 function king_mv(data, dest) {
@@ -389,11 +364,7 @@ function king_mv(data, dest) {
 
     const possible = filter_color(available, piece_color);
 
-    if (possible.includes(dest_el)) {
-        try_take(dest_el);
-        return true;
-    }
-    return false;
+    return check_move_and_take(possible, dest_el);
 }
 
 function king_options(x, y) {
@@ -417,14 +388,7 @@ function king_options(x, y) {
         squares.push(get(id));
     }
 
-
-    const result = [];
-    for (const square of squares) {
-        if (square !== null) {
-            result.push(square);
-        }
-    }
-    return result;
+    return filter_exists(squares);
 }
 
 function filter_color(available, piece_color) {
@@ -443,6 +407,16 @@ function filter_color(available, piece_color) {
         }
     }
     return possible;
+}
+
+function filter_exists(squares) {
+    const result = [];
+    for (const square of squares) {
+        if (square !== null) {
+            result.push(square);
+        }
+    }
+    return result;
 }
 
 function free_square(test_next) {
@@ -473,6 +447,14 @@ function check_capture_same_color(data_id, dest) {
     }
 }
 
+function check_move_and_take(possible, dest_el) {
+    if (possible.includes(dest_el)) {
+        try_take(dest_el);
+        return true;
+    }
+    return false;
+}
+
 function try_take(square) {
     if (square.hasChildNodes()) {
         take_piece(square.firstChild);
@@ -485,15 +467,6 @@ function take_piece(piece) {
     const captured = get(map[piece.id[3]]);
     captured.appendChild(piece);
 }
-
-function may_move_and_take(possible, dest_el) {
-    if (possible.includes(dest_el)) {
-        try_take(dest_el);
-        return true;
-    }
-    return false;
-}
-
 
 function get(id) {
     return document.getElementById(id);
