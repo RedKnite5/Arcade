@@ -1,3 +1,5 @@
+const letters = "abcdefgh";
+
 
 function setup() {
     setup_chess();
@@ -24,8 +26,7 @@ function max(a, b) {
 // https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces
 // Credit to Colin M.L. Burnett for chess piece images
 function setup_chess() {
-    const board = document.getElementById("board");
-    const letters = "abcdefgh";
+    const board = get("board");
 
     for (let i=0; i<8; i++) {
         let row = document.createElement("div")
@@ -57,7 +58,7 @@ function setup_chess() {
             }
         }
     }
-    const sqsize = document.getElementById("a8").offsetHeight;
+    const sqsize = get("a8").offsetHeight;
     add_chess_piece("a8", "rd");
     add_chess_piece("b8", "nd");
     add_chess_piece("c8", "bd");
@@ -97,12 +98,13 @@ function setup_chess() {
 function add_chess_piece(squareid, file) {
     // janky static variable
     if (!("size" in this)) {
-        this.size = document.getElementById(squareid).offsetWidth;
+        this.size = get(squareid).offsetWidth;
     }
     const filename = "Chess_" + file + "t45.svg.png";
-    const square = document.getElementById(squareid);
+    const square = get(squareid);
     const image = document.createElement("img");
     image.id = squareid + file;
+    image.alt = file;
     image.draggable = true;
     image.ondragstart = drag;
     image.height = this.size;
@@ -119,11 +121,11 @@ function allow_drop(event) {
 function drag(event) {
     const data = {
         id: event.target.id,
-        origin: document.getElementById(event.target.id).parentElement.id,
+        origin: get(event.target.id).parentElement.id,
     }
     event.dataTransfer.setData("text", JSON.stringify(data));
 }
-  
+
 function drop(event) {
     event.preventDefault();
     const data = JSON.parse(event.dataTransfer.getData("text"));
@@ -141,23 +143,27 @@ function drop(event) {
             console.log(event.target.classList);
         }
     }
-    const target = document.getElementById(dest)
+    const target = get(dest)
+    
     
     let valid = false;
-    if (data.id[2] === "p") {
+    const piece = data.id[2];
+    if (piece === "p") {
         valid = pawn_mv(data, dest);
-    } else if (data.id[2] === "r") {
+    } else if (piece === "r") {
         valid = rook_mv(data, dest);
-    } else if (data.id[2] === "b") {
+    } else if (piece === "b") {
         valid = bishop_mv(data, dest);
+    } else if (piece === "n") {
+        valid = knight_mv(data, dest);
     }
 
     if (valid) {
         //await sleep(1000);
         //console.log("target: ", event.target);
         //console.log("id: ", data.id);
-        //console.log("element: ", document.getElementById(data.id));
-        target.appendChild(document.getElementById(data.id));
+        //console.log("element: ", get(data.id));
+        target.appendChild(get(data.id));
     }
 }
 
@@ -166,7 +172,7 @@ function pawn_mv(data, dest) {
     const colormap = {l: 1, d: -1};
     const dir = colormap[data.id[3]];
 
-    const dest_el = document.getElementById(dest);
+    const dest_el = get(dest);
     const origin_file = data.origin[0];
     const dest_file = dest[0];
     const origin_rank = data.origin[1];
@@ -176,7 +182,7 @@ function pawn_mv(data, dest) {
 
     // TODO: en passant and promotion
 
-    //console.log(document.getElementById(dest))
+    //console.log(get(dest))
     if (check_capture_same_color(data.id, dest)) {
         return false;
     }
@@ -197,9 +203,9 @@ function pawn_mv(data, dest) {
     {
         const three_or_six = (4.5-1.5*dir).toString();
         const rank_three_or_six_id = origin_file + three_or_six;
-        //console.log("jumping: ", document.getElementById(rank_three_or_six_id));
-        //console.log("children: ", document.getElementById(rank_three_or_six_id).children);
-        if (!document.getElementById(rank_three_or_six_id).hasChildNodes()) {
+        //console.log("jumping: ", get(rank_three_or_six_id));
+        //console.log("children: ", get(rank_three_or_six_id).children);
+        if (!get(rank_three_or_six_id).hasChildNodes()) {
             return true;
         }
     }
@@ -208,7 +214,7 @@ function pawn_mv(data, dest) {
 
 function rook_mv(data, dest) {
     const invletters = {a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7};
-    const dest_el = document.getElementById(dest);
+    const dest_el = get(dest);
     const origin_file = invletters[data.origin[0]];
     const dest_file = invletters[dest[0]];
     const origin_rank = data.origin[1];
@@ -243,11 +249,9 @@ function rook_mv(data, dest) {
 }
 
 function vert_id_rook(origin_rank, i) {
-    const letters = "abcdefgh";
     return vert_id = letters[i] + origin_rank;
 }
 function hori_id_rook(origin_file, i) {
-    const letters = "abcdefgh";
     return letters[origin_file] + i.toString();
 }
 
@@ -260,7 +264,7 @@ function rook_checking(match1, match2, diff1, diff2, dest_el, id_func) {
         for (let i=start; i<end; i++) {
             let test_id = id_func(match1, i);
             //console.log(test_id);
-            let test_el = document.getElementById(test_id);
+            let test_el = get(test_id);
             //console.log(test_el);
             if (test_el.hasChildNodes() && i !== start) {
                 return false;
@@ -274,7 +278,7 @@ function rook_checking(match1, match2, diff1, diff2, dest_el, id_func) {
 
 function bishop_mv(data, dest) {
     const invletters = {a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7};
-    const dest_el = document.getElementById(dest);
+    const dest_el = get(dest);
     const origin_file = invletters[data.origin[0]];
     const origin_rank = data.origin[1];
     const piece_id = data.id;
@@ -286,13 +290,13 @@ function bishop_mv(data, dest) {
     let x = origin_file;
     let y = parseInt(origin_rank);
 
-    add_diag(x, y, 1, 1, piece_color, possible);
-    add_diag(x, y, 1, -1, piece_color, possible);
-    add_diag(x, y, -1, 1, piece_color, possible);
-    add_diag(x, y, -1, -1, piece_color, possible);
+    possible.push(...add_diag(x, y, 1, 1, piece_color));
+    possible.push(...add_diag(x, y, 1, -1, piece_color));
+    possible.push(...add_diag(x, y, -1, 1, piece_color));
+    possible.push(...add_diag(x, y, -1, -1, piece_color));
 
-    console.log(possible);
-    console.log(dest);
+    //console.log(possible);
+    //console.log(dest);
     if (possible.includes(dest) && other_piece_color !== piece_color) {
         try_take(dest_el);
         return true;
@@ -307,18 +311,77 @@ function get_dest_color(dest_el) {
     return null;
 }
 
-function add_diag(x, y, x_dir, y_dir, color, arr) {
-    const letters = "abcdefgh";
+function add_diag(x, y, x_dir, y_dir, color) {
+    const arr = [];
     let open = true;
     for (let i=1; i<8 && open; i++) {
         let test_id_up_right = letters[x + x_dir*i] + (y + y_dir*i).toString();
         open = free_square(test_id_up_right, color);
-        arr[arr.length] = test_id_up_right;
+        arr.push(test_id_up_right);
     }
+    return arr;
 }
 
+function knight_mv(data, dest) {
+    const invletters = {a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7};
+    const dest_el = get(dest);
+    const origin_file = invletters[data.origin[0]];
+    const origin_rank = data.origin[1];
+    const piece_id = data.id;
+    const piece_color = piece_id[3];
+
+    const available = [];
+
+    let x = origin_file;
+    let y = parseInt(origin_rank);
+
+    available.push(...knight_available(x, y, 1, 1));
+    available.push(...knight_available(x, y, 1, -1));
+    available.push(...knight_available(x, y, -1, 1));
+    available.push(...knight_available(x, y, -1, -1));
+
+    //console.log("av: ", available);
+    
+    const possible = [];
+    for (const square of available) {
+        if (!square.hasChildNodes()) {
+            possible.push(square);
+            continue;
+        }
+        if (square.firstChild.id[3] !== piece_color) {
+            possible.push(square);
+        }
+    }
+    //console.log("pos: ", possible);
+
+    if (possible.includes(get(dest))) {
+        try_take(dest_el);
+        return true;
+    }
+    return false;
+
+}
+
+function knight_available(x, y, dir1, dir2) {
+    const id1 = letters[x + dir1*1] + (y + dir2*2).toString();
+    const id2 = letters[x + dir1*2] + (y + dir2*1).toString();
+
+    const square1 = get(id1);
+    const square2 = get(id2);
+
+    const result = [];
+    if (square1 !== null) {
+        result.push(square1);
+    }
+    if (square2 !== null) {
+        result.push(square2);
+    }
+    return result;
+}
+
+
 function free_square(id, piece_color) {
-    const test_up = document.getElementById(id);
+    const test_up = get(id);
     if (test_up === null) {
         return false;
     }
@@ -329,7 +392,7 @@ function free_square(id, piece_color) {
 }
 
 function check_capture_same_color(data_id, dest) {
-    const dest_el = document.getElementById(dest);
+    const dest_el = get(dest);
     if (dest_el.hasChildNodes()) {
         if (dest_el.firstChild.id[3] === data_id[3]) {
             return true;
@@ -346,8 +409,12 @@ function try_take(square) {
 function take_piece(piece) {
     const map = {"l": "BCP", "d": "WCP"};
     //console.log("PID: ", piece.id);
-    const captured = document.getElementById(map[piece.id[3]]);
+    const captured = get(map[piece.id[3]]);
     captured.appendChild(piece);
+}
+
+function get(id) {
+    return document.getElementById(id);
 }
 
 
