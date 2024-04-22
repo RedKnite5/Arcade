@@ -61,7 +61,6 @@ function setup_chess() {
             }
         }
     }
-    const sqsize = get("a8").offsetHeight;
     add_chess_piece("a8", "rd");
     add_chess_piece("b8", "nd");
     add_chess_piece("c8", "bd");
@@ -165,6 +164,8 @@ function drop(event) {
         valid = bishop_mv(data, dest);
     } else if (piece === "n") {
         valid = knight_mv(data, dest);
+    } else if (piece === "q") {
+        valid = queen_mv(data, dest);
     }
 
     if (valid) {
@@ -318,23 +319,6 @@ function knight_mv(data, dest) {
 
 }
 
-function filter_color(available, piece_color) {
-    const possible = [];
-    for (const square of available) {
-        if (square === null) {
-            continue;
-        }
-        if (!square.hasChildNodes()) {
-            possible.push(square);
-            continue;
-        }
-        if (square.firstChild.id[3] !== piece_color) {
-            possible.push(square);
-        }
-    }
-    return possible;
-}
-
 function knight_available(x, y, dir1, dir2) {
     const id1 = letters[x + dir1*1] + (y + dir2*2).toString();
     const id2 = letters[x + dir1*2] + (y + dir2*1).toString();
@@ -350,6 +334,53 @@ function knight_available(x, y, dir1, dir2) {
         result.push(square2);
     }
     return result;
+}
+
+function queen_mv(data, dest) {
+    const dest_el = get(dest);
+    const piece_id = data.id;
+    const piece_color = piece_id[3];
+
+    const available = [];
+
+    [x, y] = parse_data(data);
+
+    available.push(...add_dir(x, y, 1, 0));
+    available.push(...add_dir(x, y, -1, 0));
+    available.push(...add_dir(x, y, 0, 1));
+    available.push(...add_dir(x, y, 0, -1));
+
+    available.push(...add_dir(x, y, 1, 1));
+    available.push(...add_dir(x, y, 1, -1));
+    available.push(...add_dir(x, y, -1, 1));
+    available.push(...add_dir(x, y, -1, -1));
+
+    const possible = filter_color(available, piece_color);
+
+    //console.log(possible);
+    //console.log(dest);
+    if (possible.includes(get(dest))) {
+        try_take(dest_el);
+        return true;
+    }
+    return false;
+}
+
+function filter_color(available, piece_color) {
+    const possible = [];
+    for (const square of available) {
+        if (square === null) {
+            continue;
+        }
+        if (!square.hasChildNodes()) {
+            possible.push(square);
+            continue;
+        }
+        if (square.firstChild.id[3] !== piece_color) {
+            possible.push(square);
+        }
+    }
+    return possible;
 }
 
 function free_square(test_next) {
