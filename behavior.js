@@ -166,6 +166,8 @@ function drop(event) {
         valid = knight_mv(data, dest);
     } else if (piece === "q") {
         valid = queen_mv(data, dest);
+    } else if (piece === "k") {
+        valid = king_mv(data, dest);
     }
 
     if (valid) {
@@ -179,49 +181,59 @@ function drop(event) {
 }
 
 function pawn_mv(data, dest) {
-    const invletters = {a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7};
-    const colormap = {l: 1, d: -1};
-    const dir = colormap[data.id[3]];
-
     const dest_el = get(dest);
-    const origin_file = data.origin[0];
-    const dest_file = dest[0];
-    const origin_rank = data.origin[1];
-    const dest_rank = dest[1];
+    const piece_id = data.id;
+    const piece_color = piece_id[3];
+    const other_color = {"l": "d", "d": "l"}[piece_color];
+    const dir = {"l": 1, "d": -1}[piece_color];
 
-    const next_rank = parseInt(origin_rank) + dir;
+    [x, y] = parse_data(data);
 
-    // TODO: en passant and promotion
+    const forward_two = get(letters[x] + (y + dir).toString());
+    let no_capture = [forward_two];
 
-    //console.log(get(dest))
-    if (check_capture_same_color(data.id, dest)) {
-        return false;
+    const starting_square = data.id.slice(0, 2);
+    if (data.origin === starting_square) {
+        no_capture.push(get(letters[x] + (y + 2*dir).toString()));
     }
 
-    if (dest_el.hasChildNodes()) {
-        const hori_dist = (invletters[origin_file] - invletters[dest_file])**2;
-        if (hori_dist === 1 && next_rank === parseInt(dest_rank)) {
-            take_piece(dest_el.firstChild);
-            return true;
-        }
-        return false;
-    }
-    if (origin_file === dest_file && next_rank === parseInt(dest_rank)) {
-        return true;
-    }
-    if (data.origin === data.id.slice(0, 2) &&
-        (next_rank + dir) === parseInt(dest_rank))
-    {
-        const three_or_six = (4.5-1.5*dir).toString();
-        const rank_three_or_six_id = origin_file + three_or_six;
-        //console.log("jumping: ", get(rank_three_or_six_id));
-        //console.log("children: ", get(rank_three_or_six_id).children);
-        if (!get(rank_three_or_six_id).hasChildNodes()) {
-            return true;
+    no_capture = filter_color(no_capture, piece_color);
+    no_capture = filter_color(no_capture, other_color);
+
+    const yes_capture = pawn_options(x, y, dir);
+    const viable = filter_color(yes_capture, piece_color);
+    const possible = [];
+    for (const square of viable) {
+        if (square.hasChildNodes()) {
+            possible.push(square);
         }
     }
-    return false;
+
+    possible.push(...no_capture);
+
+    return may_move_and_take(possible, dest_el);
 }
+
+function pawn_options(x, y, dir) {
+    const id1 = letters[x + 1] + (y + dir).toString();
+    const id3 = letters[x - 1] + (y + dir).toString();
+
+    const ids = [id1, id3];
+
+    const squares = [];
+    for (const id of ids) {
+        squares.push(get(id));
+    }
+
+    const result = [];
+    for (const square of squares) {
+        if (square !== null) {
+            result.push(square);
+        }
+    }
+    return result;
+}
+
 
 function rook_mv(data, dest) {
     const dest_el = get(dest);
@@ -241,7 +253,7 @@ function rook_mv(data, dest) {
 
     //console.log(possible);
     //console.log(dest);
-    if (possible.includes(get(dest))) {
+    if (possible.includes(dest_el)) {
         try_take(dest_el);
         return true;
     }
@@ -266,7 +278,7 @@ function bishop_mv(data, dest) {
 
     //console.log(possible);
     //console.log(dest);
-    if (possible.includes(get(dest))) {
+    if (possible.includes(dest_el)) {
         try_take(dest_el);
         return true;
     }
@@ -311,7 +323,7 @@ function knight_mv(data, dest) {
     const possible = filter_color(available, piece_color);
     //console.log("pos: ", possible);
 
-    if (possible.includes(get(dest))) {
+    if (possible.includes(dest_el)) {
         try_take(dest_el);
         return true;
     }
@@ -359,11 +371,60 @@ function queen_mv(data, dest) {
 
     //console.log(possible);
     //console.log(dest);
-    if (possible.includes(get(dest))) {
+    if (possible.includes(dest_el)) {
         try_take(dest_el);
         return true;
     }
     return false;
+}
+
+function king_mv(data, dest) {
+    const dest_el = get(dest);
+    const piece_id = data.id;
+    const piece_color = piece_id[3];
+
+    [x, y] = parse_data(data);
+
+    const available = king_options(x, y);
+
+    const possible = filter_color(available, piece_color);
+
+    if (possible.includes(dest_el)) {
+        try_take(dest_el);
+        return true;
+    }
+    return false;
+}
+
+function king_options(x, y) {
+    const id1 = letters[x + 1] + (y + 1).toString();
+    const id2 = letters[x + 1] + (y).toString();
+    const id3 = letters[x + 1] + (y - 1).toString();
+
+    const id4 = letters[x] + (y + 1).toString();
+
+    const id5 = letters[x] + (y - 1).toString();
+
+    const id6 = letters[x - 1] + (y + 1).toString();
+    const id7 = letters[x - 1] + (y).toString();
+    const id8 = letters[x - 1] + (y - 1).toString();
+
+    const ids = [id1, id2, id3, id4, id5, id6, id7, id8];
+
+    const squares = [];
+
+    for (const id of ids) {
+        squares.push(get(id));
+    }
+
+
+    const result = [];
+    for (const square of squares) {
+        if (square !== null) {
+            result.push(square);
+        }
+    }
+    return result;
 }
 
 function filter_color(available, piece_color) {
@@ -372,6 +433,7 @@ function filter_color(available, piece_color) {
         if (square === null) {
             continue;
         }
+        //console.log("square: ", square);
         if (!square.hasChildNodes()) {
             possible.push(square);
             continue;
@@ -423,6 +485,15 @@ function take_piece(piece) {
     const captured = get(map[piece.id[3]]);
     captured.appendChild(piece);
 }
+
+function may_move_and_take(possible, dest_el) {
+    if (possible.includes(dest_el)) {
+        try_take(dest_el);
+        return true;
+    }
+    return false;
+}
+
 
 function get(id) {
     return document.getElementById(id);
