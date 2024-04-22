@@ -219,10 +219,7 @@ function pawn_options(x, y, dir) {
 
     const ids = [id1, id3];
 
-    const squares = [];
-    for (const id of ids) {
-        squares.push(get(id));
-    }
+    const squares = get_all(ids);
 
     return filter_exists(squares);
 }
@@ -382,11 +379,7 @@ function king_options(x, y) {
 
     const ids = [id1, id2, id3, id4, id5, id6, id7, id8];
 
-    const squares = [];
-
-    for (const id of ids) {
-        squares.push(get(id));
-    }
+    const squares = get_all(ids);
 
     return filter_exists(squares);
 }
@@ -466,6 +459,14 @@ function take_piece(piece) {
     //console.log("PID: ", piece.id);
     const captured = get(map[piece.id[3]]);
     captured.appendChild(piece);
+}
+
+function get_all(ids) {
+    const squares = [];
+    for (const id of ids) {
+        squares.push(get(id));
+    }
+    return squares;
 }
 
 function get(id) {
