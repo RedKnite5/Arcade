@@ -1,4 +1,7 @@
 const letters = "abcdefgh";
+const turns = false;
+
+let whites_turn = true;
 
 
 function setup() {
@@ -144,7 +147,13 @@ function drop(event) {
         }
     }
     const target = get(dest)
-    
+
+    const white = data.id[3] === "l";
+
+    if (whites_turn !== white && turns) {
+        console.log("not your turn");
+        return;
+    }
     
     let valid = false;
     const piece = data.id[2];
@@ -165,6 +174,7 @@ function drop(event) {
         //console.log("element: ", get(data.id));
         target.appendChild(get(data.id));
     }
+    whites_turn = !whites_turn;
 }
 
 function pawn_mv(data, dest) {
@@ -356,8 +366,8 @@ function parse_data(data) {
     const invletters = {a: 0, b: 1, c: 2, d: 3, e: 4, f: 5, g: 6, h: 7};
     const origin_file = invletters[data.origin[0]];
     const origin_rank = data.origin[1];
-    let x = origin_file;
-    let y = parseInt(origin_rank);
+    const x = origin_file;
+    const y = parseInt(origin_rank);
     return [x, y];
 }
 
