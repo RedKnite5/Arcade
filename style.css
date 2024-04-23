@@ -1,7 +1,7 @@
 
 header {
     background: linear-gradient(-45deg, #ad5e46, #c9306a, #2588ad, #1da364);
-    background-size: 400% 30%;
+    background-size: 400% 200%;
     animation: gradient 15s linear infinite;
 }
 
@@ -37,9 +37,9 @@ section {
 
 #board {
     height: 90vh;
-    max-height: 95vw;
+    max-height: 90vw;
     width: 90vh;
-    max-width: 95vw;
+    max-width: 90vw;
     display: flex;
     flex-direction: column;
     background-color: black;
@@ -48,18 +48,51 @@ section {
 
 .chess-game {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     width: 100%;
     justify-content: space-evenly; 
 }
 
-.chess-part {
+.capture-section {
+    display: flex;
+    flex-direction: row;
     text-align: center; 
-    width: 33%;
+    width: 100%;
 }
 
 .piece-container {
     display: flex;
+    flex-direction: row;
     flex-wrap: wrap;
 }
 
+/* desktop */
+@media (min-width: 50rem) {
+    .chess-game {
+        flex-direction: row;
+    }
+
+    .capture-section {
+        display: block;
+    }
+
+    .capture-section {
+        display: flex;
+        flex-direction: row;
+        text-align: center; 
+        width: 20%;
+    }
+
+    #board {
+        max-height: 60vw;
+        max-width: 60vw;
+    }
+}
+
+/* mobile */
+@media (max-width: 50rem) {
+    h3 {
+        max-width: 5yyrem;
+        font-size: small;
+    }
+}

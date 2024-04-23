@@ -92,9 +92,12 @@ function make_square(j, i) {
     let square = document.createElement("div");
     square.id = make_id(j, 8 - i);
 
-    square.style.flexGrow = 1;
-    square.style.flexBasis = 0;
+    //square.style.flexGrow = 1;
+    //square.style.flexShrink = 0;
+    square.style.flexBasis = "100%";
     square.style.textAlign = "center";
+    square.style.aspectRatio = "1/1";
+    //square.style.maxWidth = .125;
     square.className = "square";
     square.ondrop = drop;
     square.ondragover = allow_drop;
@@ -110,7 +113,7 @@ function make_square(j, i) {
 function add_chess_piece(squareid, file) {
     // janky static variable
     if (!("size" in this)) {
-        this.size = get(squareid).offsetWidth;
+        this.size = get(squareid).offsetWidth - 1;
     }
     const filename = "Chess_" + file + "t45.svg.png";
     const square = get(squareid);
