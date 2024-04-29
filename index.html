@@ -13,7 +13,8 @@
     </header>
 
     <section class="chess">
-        <h2>Chess</h2>
+        <h2>Capture the King</h2>
+        <h3>A Chess Variant</h3>
         <div class="chess-game">
             <div class="chess-part capture-section">
                 <h3>White Captured Pieces</h3>
@@ -27,6 +28,24 @@
                 <div id="BCP" class="piece-container"></div>
             </div>
         </div>
+
+        <div id="promotion_modal_l" class="modal">
+            <div id="modal_display_l" class="modal_display">
+            </div>
+        </div>
+
+        <div id="promotion_modal_d" class="modal">
+            <div id="modal_display_d" class="modal_display">
+            </div>
+        </div>
+        
+        <div id="victory_modal" class="modal">
+            <div id="victory_modal_display" class="modal_display victory">
+                <p id="victory_text"></p>
+                <button id="restart">Restart</button>
+            </div>
+        </div>
+
     </section>
 </body>
 </html>
