@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Liar's Dice</title>
+        <link rel="stylesheet" href="ld_ss.css">
+        <script src="liars_dice.js"></script>
+    </head>
+    <body>
+        <button id="resartButton" onclick="restartGame()">Restart</button>
+        <button id="combineHands" onclick="test_getBestHand()">get best hand</button>
+        <button id="newHandButton" onclick="newHand()">new hand</button>
+        <br>
+        <button id="reduceP1LifeButton" onclick="reduceP1_Life()">Reduce P1 Life</button>
+        <button id="reduceP2LifeButton" onclick="reduceP2_Life()">Reduce P2 Life</button>
+        <button id="logGameStateButton" onclick="logGameState()">Log Game State</button>
+        <br>
+        <button id="displayP1HandButton" onclick="displayP1Hand()">Display P1 Hand</button>
+        <br>
+        <button id="hideP1HandButton" onclick="hideP2Hand()">Hide P2 Hand</button>
+        <button id="displayP2HandButton" onclick="displayP2Hand()">Display P2 Hand</button>
+        <br><br><br>
+        Opponent's life: <p1_count id = "p2_life_count"></p1_count>
+        <br><br>
+        Opponent's Hand:
+        <div class = "dice_display">
+            <div class = "die">
+                <img id = "p2_hand_0"></id>
+            </div>
+            <div class = "die">
+                <img id = "p2_hand_1"></id>
+            </div>
+            <div class = "die">
+                <img id = "p2_hand_2"></id>
+            </div>
+            <div class = "die">
+                <img id = "p2_hand_3"></id>
+            </div>
+            <div class = "die">
+                <img id = "p2_hand_4"></id>
+            </div>
+        </div>
+        <br><br>
+        <div class = "response_box">
+            <p2_response id = "p2_response"></p2_response>
+        </div>
+        <br><br>
+        <div class = "bid_tracker">
+            Current Bid: <curr_bid id = "curr_bid">?</curr_bid>&emsp;<hand_reveal id = "dispCurr_hand"></hand_reveal>
+            <br>
+            <outcome_display id = "dispOutcome"></outcome_display>
+        </div>
+        <br><br><br>
+        Current life: <p1_count id = "p1_life_count"></p1_count>
+        <br><br>
+        Your Hand:
+        <div class = "dice_display">
+            <div class = "die">
+                <img id = "p1_hand_0"></id>
+            </div>
+            <div class = "die">
+                <img id = "p1_hand_1"></id>
+            </div>
+            <div class = "die">
+                <img id = "p1_hand_2"></id>
+            </div>
+            <div class = "die">
+                <img id = "p1_hand_3"></id>
+            </div>
+            <div class = "die">
+                <img id = "p1_hand_4"></id>
+            </div>
+        </div>
+        <input id="increaseBidButton" type="button" value="?" onclick="increaseBidAndPass()">
+        <button id="callLiarButton" onclick="callLiar()">Call Liar</button>
+    </body>
+</html>

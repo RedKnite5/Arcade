@@ -35,7 +35,7 @@ section {
     background-color: grey;
 }
 
-#board {
+.board {
     height: 90vh;
     max-height: 90vw;
     width: 90vh;
@@ -70,8 +70,19 @@ section {
 }
 
 .victory {
-    font-size: 10vh;
+    font-size: 10vw;
     font-family: Arial, Helvetica, sans-serif;
+    flex-direction: column;
+    border-radius: 5vh;
+    align-items: center;
+}
+
+.victory-text {
+    margin: 5vh;
+}
+
+.restart-button {
+    width: 5rem;
 }
 
 /* Adapted modal from */
@@ -87,10 +98,10 @@ section {
     text-align: center;
 }
   
-.modal_display {
+.modal-display {
     display: inline-flex;
     background-color: white;
-    margin: 15% auto;
+    margin: 40vh auto;
     border: 1px solid grey;
 }
 
@@ -114,9 +125,13 @@ section {
         width: 20%;
     }
 
-    #board {
+    .board {
         max-height: 60vw;
         max-width: 60vw;
+    }
+
+    .victory {
+        font-size: 10vh;
     }
 }
 

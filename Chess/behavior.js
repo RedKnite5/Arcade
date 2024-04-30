@@ -1,7 +1,7 @@
 "use strict";
 
 const letters = "abcdefgh";
-const turns = false;
+const turns = true;
 
 let whites_turn = true;
 let en_passant = null;
@@ -16,8 +16,8 @@ function setup() {
 function setup_chess() {
     const board = get("board");
 
-    for (let i=0; i<8; i++) {
-        let row = make_row(i);
+    for (let i = 0; i < 8; i++) {
+        const row = make_row(i);
         board.appendChild(row);
     }
     add_pieces();
@@ -87,23 +87,20 @@ function make_row(i) {
     row.className = "row";
 
     for (let j = 0; j < 8; j++) {
-        let square = make_square(j, i);
+        const square = make_square(j, i);
         row.appendChild(square);
     }
     return row;
 }
 
 function make_square(j, i) {
-    let square = document.createElement("div");
+    const square = document.createElement("div");
     square.id = make_id(j, 8 - i);
 
     square.style.flexGrow = 1;
-    //square.style.flexShrink = 0;
-    //square.style.flexBasis = "100%";
     square.style.flexBasis = 0;
     square.style.textAlign = "center";
     square.style.aspectRatio = "1/1";
-    //square.style.maxWidth = .125;
     square.className = "square";
     square.ondrop = drop;
     square.ondragover = allow_drop;
@@ -144,7 +141,7 @@ function drag(event) {
     const data = {
         id: event.target.id,
         origin: get(event.target.id).parentElement.id,
-    }
+    };
     event.dataTransfer.setData("text", JSON.stringify(data));
 }
 
@@ -159,25 +156,22 @@ function drop(event) {
         dest = event.target.id;
 
         if (!event.target.classList.contains("square")) {
-            alert("Problem! Non-square target")
+            alert("Problem! Non-square target");
             console.log(event.target);
             console.log(event.target.id);
             console.log(event.target.classList);
         }
     }
-    const target = get(dest)
-    
+    const target = get(dest);
+
     const color = get_color(data.id);
     const piece = get_piece(data.id);
 
     const white = color === "l";
 
-    const your_turn = whites_turn === white || !turns
+    const your_turn = whites_turn === white || !turns;
     if (your_turn) {
         const valid = check_valid(data, dest);
-
-        //const check = check_check(color, target);
-        //console.log("check: ", check);
 
         if (valid) {
             if (piece !== "p") {
@@ -220,7 +214,7 @@ function pawn_mv(data, dest) {
     const dest_el = get(dest);
     const piece_id = data.id;
     const piece_color = get_color(piece_id);
-    const dir = {"l": 1, "d": -1}[piece_color];
+    const dir = get_pawn_dir(piece_color);
 
     const [x, y] = parse_data(data);
 
@@ -245,9 +239,6 @@ function pawn_mv(data, dest) {
 
     const valid = check_move_and_take(possible, dest_el);
 
-    //const check = check_check(piece_color, target);
-    //console.log("check: ", check);
-
     if (valid) {
         if (dest_el === forward_two) {
             en_passant = forward_two_id;
@@ -256,7 +247,7 @@ function pawn_mv(data, dest) {
         }
 
         if (dest_y === 1 || dest_y === 8) {
-            const promotion_modal = get("promotion_modal_" + piece_color);
+            const promotion_modal = get("promotion-modal-" + piece_color);
             promotion_modal.style.display = "block";
 
             make_promotion_options(piece_color, get(piece_id));
@@ -267,16 +258,16 @@ function pawn_mv(data, dest) {
 }
 
 function forward_moves(x, y, dir, data, forward_two, piece_color) {
-    const other_color = {"l": "d", "d": "l"}[piece_color];
+    const other_color = get_other_color(piece_color);
     const forward = get_sq(x, y + dir);
-    const forward_moves = [forward];
+    const forward_options = [forward];
 
     const starting_square = data.id.slice(0, 2);
     if (data.origin === starting_square) {
-        forward_moves.push(forward_two);
+        forward_options.push(forward_two);
     }
 
-    const no_capture_self = filter_color(forward_moves, piece_color);
+    const no_capture_self = filter_color(forward_options, piece_color);
     const no_capture = filter_color(no_capture_self, other_color);
     return no_capture;
 }
@@ -307,7 +298,7 @@ function check_en_passant(square_id, en_passant, dir) {
 }
 
 function make_promotion_options(color, pawn) {
-    const modal_display = get("modal_display_" + color);
+    const modal_display = get("modal-display-" + color);
     for (const letter of "qrbn") {
         modal_display.appendChild(make_promotion_option(letter + color, pawn));
     }
@@ -323,10 +314,10 @@ function make_promotion_option(piece, pawn) {
 
     const [x, y] = parse_id(pawn.parentElement.id);
     const color = get_color(pawn.id);
-    const dir = {"l": 1, "d": -1}[color];
+    const dir = get_pawn_dir(color);
 
-    const modal_display = get("modal_display_" + color);
-    
+    const modal_display = get("modal-display-" + color);
+
     function promote_pawn() {
         pawn.src = filename;
         pawn.id = make_id(x, y + dir) + piece;
@@ -365,7 +356,7 @@ function rook_mv(data, dest) {
     if (valid) {
         get(piece_id).has_moved = true;
     }
-    return valid
+    return valid;
 }
 
 function rook_options(x, y, piece_color) {
@@ -402,20 +393,13 @@ function bishop_options(x, y, piece_color) {
     return filter_color(available, piece_color);
 }
 
-function get_dest_color(dest_el) {
-    if (dest_el.hasChildNodes()) {
-        return get_color(dest_el.firstChild.id);
-    }
-    return null;
-}
-
 function add_dir(x, y, x_dir, y_dir) {
     const arr = [];
     let open = true;
     let i = 1;
     while (i < 8 && open) {
-        let next_id = make_id(x + x_dir*i, y + y_dir*i);
-        let next = get(next_id);
+        const next_id = make_id(x + x_dir * i, y + y_dir * i);
+        const next = get(next_id);
         open = free_square(next);
         arr.push(next);
         i++;
@@ -448,8 +432,8 @@ function knight_options(x, y, piece_color) {
 }
 
 function knight_available(x, y, x_dir, y_dir) {
-    const id1 = make_id(x + x_dir, y + y_dir*2);
-    const id2 = make_id(x + x_dir*2, y + y_dir);
+    const id1 = make_id(x + x_dir, y + y_dir * 2);
+    const id2 = make_id(x + x_dir * 2, y + y_dir);
     const ids = [id1, id2];
     const squares = get_all(ids);
     return filter_exists(squares);
@@ -495,8 +479,6 @@ function king_mv(data, dest) {
 
     const castling = check_castling(get(piece_id));
 
-    //console.log("castling: ", castling);
-
     possible.push(...filter_exists(castling));
 
     const valid = check_move_and_take(possible, dest_el);
@@ -504,15 +486,17 @@ function king_mv(data, dest) {
         get(piece_id).has_moved = true;
 
         if (dest_el === castling[0]) {
-            const short_rk = get_sq(x + 3, y).firstChild;
+            const SHORT_RK_DIST = 3;
+            const short_rk = get_sq(x + SHORT_RK_DIST, y).firstChild;
             get_sq(x + 1, y).appendChild(short_rk);
         }
         if (dest_el === castling[1]) {
-            const short_rk = get_sq(x - 4, y).firstChild;
-            get_sq(x - 1, y).appendChild(short_rk);
+            const LONG_RK_DIST = -4;
+            const long_rk = get_sq(x + LONG_RK_DIST, y).firstChild;
+            get_sq(x - 1, y).appendChild(long_rk);
         }
     }
-    return valid
+    return valid;
 }
 
 function king_options(x, y, piece_color) {
@@ -524,7 +508,7 @@ function king_options(x, y, piece_color) {
 
     const id5 = make_id(x, y-1);
 
-    const id6 = make_id(x-1, y+1)
+    const id6 = make_id(x-1, y+1);
     const id7 = make_id(x-1, y);
     const id8 = make_id(x-1, y-1);
 
@@ -602,55 +586,6 @@ function check_rook_moved(rk_square) {
     return true;
 }
 
-/*
-function check_check(color, square) {
-    // remove king while checking directions
-    const king = get_king(color);
-    const king_square = king.parentNode;
-    king_square.removeChild(king);
-
-    const [x, y] = parse_id(square.id);
-    //console.log("square_id: ", square.id)
-    //console.log("x, y: ", x, y)
-
-    function type_of_check(func, pieces) {
-        const directions = func(x, y, color)
-        //console.log("directions, pieces: ", directions, pieces)
-        for (const sight_square of directions) {
-            //console.log("sight_square: ", sight_square);
-            if (sight_square.hasChildNodes()) {
-                const piece = sight_square.firstChild.id;
-                const diff_color = get_color(piece) !== color;
-                //console.log("diff_color: ", diff_color)
-                //console.log("get_piece(piece): ", get_piece(piece))
-                //console.log("pieces: ", pieces)
-                //console.log("includes: ", pieces.includes(get_piece(piece)))
-                if (diff_color && pieces.includes(get_piece(piece))) {
-                    console.log("danger_square, pieces: ", sight_square, pieces)
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    const pawn_dir = {"l": 1, "d": -1}[color];
-
-    let checks = false;
-    checks ||= type_of_check(rook_options, "qr");
-    checks ||= type_of_check(bishop_options, "qb");
-    checks ||= type_of_check(knight_options, "n");
-    checks ||= type_of_check(king_options, "k");
-    checks ||= type_of_check(
-        (x, y, color) => filter_color(pawn_options(x, y, pawn_dir), color),
-        "p");
-    
-    king_square.appendChild(king);
-
-    return checks;
-}
-*/
-
 function check_move_and_take(possible, dest_el) {
     if (possible.includes(dest_el)) {
         try_take(dest_el);
@@ -663,15 +598,14 @@ function try_take(square) {
     if (square.hasChildNodes()) {
         if (get_piece(square.firstChild.id) === "k") {
             win(get_color(square.firstChild.id));
-            console.log("WIN!!!");
         }
         take_piece(square.firstChild);
     }
 }
 
 function win(loser) {
-    const modal_text = get("victory_text");
-    const winner = {"l": "Black", "d": "White"}[loser];
+    const modal_text = get("victory-text");
+    const winner = {l: "Black", d: "White"}[loser];
     modal_text.textContent = winner + " Wins!!!";
     modal_text.parentElement.parentElement.style.display = "block";
 }
@@ -680,11 +614,16 @@ function restart() {
     remove_pieces();
     add_pieces();
 
-    const modal = get("victory_modal");
+    const modal = get("victory-modal");
     modal.style.display = "none";
 }
 
-
+function take_piece(piece) {
+    const map = {l: "BCP", d: "WCP"};
+    //console.log("PID: ", piece.id);
+    const captured = get(map[get_color(piece.id)]);
+    captured.appendChild(piece);
+}
 
 
 function filter_color(available, piece_color) {
@@ -693,7 +632,8 @@ function filter_color(available, piece_color) {
         //console.log("square: ", square);
         if (square !== null) {
             const no_children = !square.hasChildNodes();
-            if (no_children || get_color(square.firstChild.id) !== piece_color) {
+            if (no_children ||
+                get_color(square.firstChild.id) !== piece_color) {
                 possible.push(square);
             }
         }
@@ -737,29 +677,18 @@ function parse_id(id) {
     return [x, y];
 }
 
-function check_capture_same_color(data_id, dest) {
-    const dest_el = get(dest);
-    if (dest_el.hasChildNodes()) {
-        if (get_color(dest_el.firstChild.id) === get_color(data_id)) {
-            return true;
-        }
-    }
+function get_pawn_dir(color) {
+    const mapping = {l: 1, d: -1};
+    return mapping[color];
 }
 
-function take_piece(piece) {
-    const map = {"l": "BCP", "d": "WCP"};
-    //console.log("PID: ", piece.id);
-    const captured = get(map[get_color(piece.id)]);
-    captured.appendChild(piece);
+function get_other_color(color) {
+    const map = {l: "d", d: "l"};
+    return map[color];
 }
 
 function make_id(x, y) {
-    return letters[x] + y.toString()
-}
-
-function get_king(color) {
-    const rank = {"l": "1", "d": "8"}[color];
-    return get("e" + rank + "k" + color);
+    return letters[x] + y.toString();
 }
 
 function get_color(id) {
@@ -785,6 +714,5 @@ function get_all(ids) {
 function get(id) {
     return document.getElementById(id);
 }
-
 
 window.onload = setup;
