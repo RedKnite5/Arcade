@@ -115,7 +115,7 @@ function make_square(j, i) {
 
 function add_chess_piece(squareid, piece) {
     const size = get(squareid).offsetWidth - 1;
-    const filename = "Chess_" + piece + "t45.svg.png";
+    const filename = "./Chess_" + piece + "t45.svg.png";
     const square = get(squareid);
     const image = document.createElement("img");
     image.id = squareid + piece;
