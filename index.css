@@ -1,0 +1,22 @@
+
+.image-link {
+    width: 20vh;
+    aspect-ratio: 1/1;
+}
+
+.game-link a {
+    color: inherit;
+    text-decoration: inherit;
+    background-color: aqua;
+}
+
+.link-text {
+    margin: 0;
+}
+
+.game-link {
+    padding: 2em;
+    border-color: black;
+    border-style: solid;
+    margin: 1em;
+}

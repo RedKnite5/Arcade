@@ -1,0 +1,33 @@
+
+header {
+    background: linear-gradient(-45deg, #ad5e46, #c9306a, #2588ad, #1da364);
+    background-size: 400% 200%;
+    animation: gradient 15s linear infinite;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+h1 {
+    margin: 0 2rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+body {
+    margin: 0;
+}
+
+.home-link {
+    color: inherit;
+    text-decoration: inherit;
+}
