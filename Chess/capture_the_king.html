@@ -9,46 +9,52 @@
 </head>
 
 <body>
-    <header>
-        <h1>
-            <a href="../index.html" class="home-link">Arcade</a>
-        </h1>
-    </header>
+    <main class="not-footer">
+        <header>
+            <h1>
+                <a href="../index.html" class="home-link">Arcade</a>
+            </h1>
+        </header>
 
-    <section class="chess">
-        <h2>Capture the King</h2>
-        <h3>A Chess Variant</h3>
-        <div class="chess-game">
-            <div class="chess-part capture-section">
-                <h3>White Captured Pieces</h3>
-                <div id="WCP" class="piece-container"></div>
+        <section class="chess">
+            <h2>Capture the King</h2>
+            <h3>A Chess Variant</h3>
+            <div class="chess-game">
+                <div class="chess-part capture-section">
+                    <h3>White Captured Pieces</h3>
+                    <div id="WCP" class="piece-container"></div>
+                </div>
+
+                <div id="board" class="board chess-part"></div>
+
+                <div class="chess-part capture-section">
+                    <h3>Black Captured Pieces</h3>
+                    <div id="BCP" class="piece-container"></div>
+                </div>
             </div>
 
-            <div id="board" class="board chess-part"></div>
-
-            <div class="chess-part capture-section">
-                <h3>Black Captured Pieces</h3>
-                <div id="BCP" class="piece-container"></div>
+            <div id="promotion-modal-l" class="modal">
+                <div id="modal-display-l" class="modal-display">
+                </div>
             </div>
-        </div>
 
-        <div id="promotion-modal-l" class="modal">
-            <div id="modal-display-l" class="modal-display">
+            <div id="promotion-modal-d" class="modal">
+                <div id="modal-display-d" class="modal-display">
+                </div>
             </div>
-        </div>
+            
+            <div id="victory-modal" class="modal">
+                <div id="victory-modal-display" class="modal-display victory">
+                    <p id="victory-text" class="victory-text"></p>
+                    <button id="restart" class="restart-button">Restart</button>
+                </div>
+            </div>
 
-        <div id="promotion-modal-d" class="modal">
-            <div id="modal-display-d" class="modal-display">
-            </div>
-        </div>
-        
-        <div id="victory-modal" class="modal">
-            <div id="victory-modal-display" class="modal-display victory">
-                <p id="victory-text" class="victory-text"></p>
-                <button id="restart" class="restart-button">Restart</button>
-            </div>
-        </div>
+        </section>
+    </main>
 
-    </section>
+    <footer>
+        © 2024 Max Friedman
+    </footer>
 </body>
 </html>

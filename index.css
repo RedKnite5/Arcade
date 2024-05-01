@@ -1,10 +1,17 @@
 
+
+body section {
+    justify-content: center;
+    align-items: center;
+}
+
 .image-link {
     width: 20vh;
     aspect-ratio: 1/1;
 }
 
 .game-link a {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     color: inherit;
     text-decoration: inherit;
     background-color: aqua;
@@ -19,4 +26,9 @@
     border-color: black;
     border-style: solid;
     margin: 1em;
+    text-align: center;
+}
+
+.game-list {
+    display: flex;
 }

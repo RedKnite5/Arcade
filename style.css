@@ -1,4 +1,8 @@
 
+:root {
+    --footer-height: 2rem;
+}
+
 header {
     background: linear-gradient(-45deg, #ad5e46, #c9306a, #2588ad, #1da364);
     background-size: 400% 200%;
@@ -25,9 +29,26 @@ h1 {
 
 body {
     margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .home-link {
     color: inherit;
     text-decoration: inherit;
+}
+
+.not-footer {
+    flex: 1;
+}
+
+footer {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: grey;
+    width: 100%;
+    height: var(--footer-height);
 }
