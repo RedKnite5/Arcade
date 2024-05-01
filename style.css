@@ -1,8 +1,4 @@
 
-:root {
-    --footer-height: 2rem;
-}
-
 header {
     background: linear-gradient(-45deg, #ad5e46, #c9306a, #2588ad, #1da364);
     background-size: 400% 200%;
@@ -50,5 +46,4 @@ footer {
     justify-content: center;
     background-color: grey;
     width: 100%;
-    height: var(--footer-height);
 }

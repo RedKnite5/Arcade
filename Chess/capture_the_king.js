@@ -24,8 +24,6 @@ function setup_chess() {
 
     get("restart").onclick = restart;
 
-
-
     //win("l");
 }
 
