@@ -15,7 +15,7 @@ The games are hosted on GitHub Pages [here](https://redknite5.github.io/Arcade/)
    git clone https://github.com/RedKnite5/Arcade.git
    ```
 
-2. Navigate to the directory of the game you want to play:
+2. Navigate to the root directory:
    ```
    cd Arcade
    ```
