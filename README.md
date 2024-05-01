@@ -8,7 +8,7 @@ Welcome to the the Arcade! This repository contains a collection of simple and e
 
 ### Getting Started:
 
-The games are hosted on GitHub Pages [here](https://redknite5.github.io/Arcade/). Or you can host it on your local machine.
+The games are hosted on GitHub Pages [here](https://redknite5.github.io/Arcade/) or you can host it on your local machine.
 
 1. Clone the repository to your local machine:
    ```
