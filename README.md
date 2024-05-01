@@ -1,6 +1,6 @@
-**Javascript Games Collection**
+**Javascript Arcade**
 
-Welcome to the my Arcade! This repository contains a collection of simple and entertaining games built using JavaScript.
+Welcome to the the Arcade! This repository contains a collection of simple and entertaining games built using JavaScript.
 ### Games Included:
 
 1. **Capture the King** A chess variant in which there is no check! Just capture the king!
@@ -8,7 +8,7 @@ Welcome to the my Arcade! This repository contains a collection of simple and en
 
 ### Getting Started:
 
-The games are hosted on GitHub Pages [here](https://redknite5.github.io/Arcade/).
+The games are hosted on GitHub Pages [here](https://redknite5.github.io/Arcade/). Or you can host it on your local machine.
 
 1. Clone the repository to your local machine:
    ```
