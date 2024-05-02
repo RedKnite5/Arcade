@@ -1,5 +1,88 @@
+body {
+    background-color: #068229;
+}
+
+header {
+    background: linear-gradient(-45deg, #f7dd6c, #f3e69c, #c6c7be, #bec7c7);
+    background-size: 400% 200%;
+    animation: gradient 15s linear infinite;
+}
+
+h1 {
+    margin: 0;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+body {
+    margin: 0;
+}
+
+.liars_dice {
+    width: 50%;
+    margin: auto;
+    font-family: Arial Black;
+    color: #F0E68C;
+}
+
+.bid_tracker {
+    margin: auto;
+    width: 50%;
+    height: 45px;
+    padding: 25px;
+    text-align: center;
+}
+
+.response_box {
+    margin: auto;
+    width: 50%;
+    height: 15px;
+    padding: 25px;
+    text-align: center;
+}
+
+.p1_responses {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    width: 50%;
+    margin: auto;
+}
+
+#incP1BidButton, #p1CallLiarButton {
+    background: #09bc36;
+}
+
+#incP1BidButton:hover, #p1CallLiarButton:hover{
+    background:#f7dd6c;
+}
+
+.dice_frame{
+    position: relative;
+}
+
 .dice_display{
     display: flex;
-    flex-flow: row wrap;
-    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    top: 5px;
+    left: 5px;
+    position: absolute;
+}
+
+.die{
+    margin: 9px;
 }
