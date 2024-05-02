@@ -106,6 +106,115 @@ const handleReset = () => {
   gameIsLive = true;
 };
 
+const miniMax = () => {
+  const board = [];
+  const cellDivs = document.querySelectorAll('.game-cell');
+  for(let i = 0; i < 9; i++)
+  {
+    board.push(cellDivs[i].classList[1]);
+  }
+  let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  for(let i = 0; i < 9; i++)
+  {
+    if(board[i] != 'x' && board[i] != 'o'){
+      board[i] == 'o';
+      if(miniMaxVictoryCheck(board)) {
+        return 1;
+      } else {
+        move_outcomes[i] = minValue([...board]);
+      }
+      board[i] = '';
+    } else {
+      board[i] = -2;
+    }
+  }
+  if(move_outcomes != [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
+    let max = -1, ret = 0;
+    for(let i = 0; i < move_outcomes.length; i++)
+    {
+      if(move_outcomes[i] > max) {
+        max = move_outcomes[i]
+        ret = i;
+      }
+    }
+    return ret;
+  }
+}
+
+function minValue(board) {
+  let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  for(let i = 0; i < 9; i++)
+  {
+    if(board[i] != 'x' && board[i] != 'o'){
+      board[i] == 'x';
+      if(miniMaxVictoryCheck(board)) {
+        return -1;
+      } else {
+        move_outcomes[i] = maxValue([...board]);
+      }
+      board[i] = '';
+    } else {
+      board[i] = 2
+    }
+  }
+  if(move_outcomes != [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
+    let min = 2;
+    for(let i = 0; i < move_outcomes.length; i++)
+    {
+      if(move_outcomes[i] < min) {
+        min = move_outcomes[i]
+      }
+    }
+    return min;
+  }
+}
+
+function maxValue(board) {
+  let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  for(let i = 0; i < 9; i++)
+  {
+    if(board[i] != 'x' && board[i] != 'o'){
+      board[i] == 'o';
+      if(miniMaxVictoryCheck(board)) {
+        return 1;
+      } else {
+        move_outcomes[i] = minValue([...board]);
+      }
+      board[i] = '';
+    } else {
+      board[i] = -2;
+    }
+  }
+  if(move_outcomes != [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
+    let max = -2;
+    for(let i = 0; i < move_outcomes.length; i++)
+    {
+      if(move_outcomes[i] > max) {
+        max = move_outcomes[i]
+      }
+    }
+    return max;
+  }
+}
+
+function miniMaxVictoryCheck(board) {
+  for(let i = 0; i < 3; i++) {
+    if(board[i] == board[i + 3] && board[i + 3] == board[i + 6]){
+      return true;
+    }
+  }
+  for(let i = 0; i < 3; i++) {
+    if(board[i] == board[i + 1] && board[i + 1] == board[i + 2]){
+      return true;
+    }
+  }
+  if((board[0] == board[4] && board[4] == board[8]) || (board[2] == board[4] && board[4] == board[6])){
+    return true;
+  } else {
+    return false;
+  }
+}
+
 const handleCellClick = (e) => {
   const classList = e.target.classList;
 
