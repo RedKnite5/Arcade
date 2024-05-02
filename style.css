@@ -17,7 +17,7 @@ header {
     }
 }
 
-h1 {
+.arcade-title {
     margin: 0 2rem;
     padding-top: 2rem;
     padding-bottom: 2rem;

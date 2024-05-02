@@ -27,6 +27,7 @@ The games are hosted on GitHub Pages [here](https://redknite5.github.io/Arcade/)
 - These games were created by Max Friedman and Jonathan Cozza as a fun project to learn and practice JavaScript programming in ECS162
 - Credit to Colin M.L. Burnett for [chess piece images](https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces)
 - The library [DragDropTouch](https://www.npmjs.com/package/drag-drop-touch) for touch based drag and drop on mobile
+- Credit to Justin Kim, angle943 on GitHub, for the [TicTacToe Game](https://github.com/angle943/tic-tac-toe)
 
 ### License:
 
