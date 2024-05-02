@@ -155,7 +155,8 @@ function p2Move() {
 
 function randInt() {
     const max = 6;
-    return Math.floor(Math.random() * (max + 1));
+    const min = 1;
+    return Math.floor(Math.random() * max + min);
 }
 
 function newHand(nextPlayer) {
