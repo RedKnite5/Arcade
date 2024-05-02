@@ -10,49 +10,49 @@ const HAND = Object.freeze({
     FIVE_OF_A_KIND: 6
 });
 
-let p1_hand = [0, 0, 0, 0, 0];
-let p2_hand = [0, 0, 0, 0, 0];
-let p1_life = 0;
-let p2_life = 0;
-let curr_bid = 1;
-let curr_player = 1;
+let p1Hand = [0, 0, 0, 0, 0];
+let p2Hand = [0, 0, 0, 0, 0];
+let p1Life = 0;
+let p2Life = 0;
+let currBid = 1;
+let currPlayer = 1;
 
-var p1_disphand = [];
-var p2_disphand = [];
+var p1Disphand = [];
+var p2Disphand = [];
 
-var p1_displife = 0;
-var p2_displife = 0;
-var dispCurr_bid = 0;
+var p1Displife = 0;
+var p2Displife = 0;
+var dispCurrBid = 0;
 
 addEventListener("load", initDispElements);
 addEventListener("load", restartGame);
 
 function initDispElements() {
-    p1_disphand.push(document.getElementById("p1_hand_0"));
-    p1_disphand.push(document.getElementById("p1_hand_1"));
-    p1_disphand.push(document.getElementById("p1_hand_2"));
-    p1_disphand.push(document.getElementById("p1_hand_3"));
-    p1_disphand.push(document.getElementById("p1_hand_4"));
-    p2_disphand.push(document.getElementById("p2_hand_0"));
-    p2_disphand.push(document.getElementById("p2_hand_1"));
-    p2_disphand.push(document.getElementById("p2_hand_2"));
-    p2_disphand.push(document.getElementById("p2_hand_3"));
-    p2_disphand.push(document.getElementById("p2_hand_4"));
+    p1Disphand.push(document.getElementById("p1_hand_0"));
+    p1Disphand.push(document.getElementById("p1_hand_1"));
+    p1Disphand.push(document.getElementById("p1_hand_2"));
+    p1Disphand.push(document.getElementById("p1_hand_3"));
+    p1Disphand.push(document.getElementById("p1_hand_4"));
+    p2Disphand.push(document.getElementById("p2_hand_0"));
+    p2Disphand.push(document.getElementById("p2_hand_1"));
+    p2Disphand.push(document.getElementById("p2_hand_2"));
+    p2Disphand.push(document.getElementById("p2_hand_3"));
+    p2Disphand.push(document.getElementById("p2_hand_4"));
     console.log("disphands initialized");
 }
 
 function restartGame() {
-    p1_life = 5;
-    p2_life = 5;
+    p1Life = 5;
+    p2Life = 5;
     newHand(1);
 }
 
 function increaseBidAndPass() {
     disableP1Inputs();
-    curr_bid++;
+    currBid++;
     updateBidText();
-    curr_player = curr_player === 1 ? 2 : 1;
-    if(curr_player === 2) {
+    currPlayer = currPlayer === 1 ? 2 : 1;
+    if(currPlayer === 2) {
         p2Move();
     } else {
         p1Move();
@@ -61,27 +61,27 @@ function increaseBidAndPass() {
 
 function displayP1Hand() {
     for(let i = 0; i < 5; i++){
-        p1_disphand[i].src = numToDiceImage(p1_hand[i]);
+        p1Disphand[i].src = numToDiceImage(p1Hand[i]);
     }
 }
 
 function displayP1Life() {
-    p1_displife = document.getElementById("p1_life_count");
-    p1_displife.textContent = p1_life;
+    p1Displife = document.getElementById("p1_life_count");
+    p1Displife.textContent = p1Life;
 }
 
 function hideP2Hand() {
-    for(let i = 0; i < p2_life; i++){
-        p2_disphand[i].src = "dice_unknown.png";
+    for(let i = 0; i < p2Life; i++){
+        p2Disphand[i].src = "dice_unknown.png";
     }
-    for(let i = p2_life; i < 5; i++){
-        p2_disphand[i].src = "dice_0.png"
+    for(let i = p2Life; i < 5; i++){
+        p2Disphand[i].src = "dice_0.png"
     }
 }
 
 function displayP2Hand() {
     for(let i = 0; i < 5; i++){
-        p2_disphand[i].src = numToDiceImage(p2_hand[i]);
+        p2Disphand[i].src = numToDiceImage(p2Hand[i]);
     }
 }
 
@@ -107,29 +107,29 @@ function numToDiceImage(n) {
 }
 
 function displayP2Life() {
-    p2_displife = document.getElementById("p2_life_count");
-    p2_displife.textContent = p2_life;
+    p2Displife = document.getElementById("p2_life_count");
+    p2Displife.textContent = p2Life;
 }
 
 function callLiar() {
     disableP1Inputs();
     displayP2Hand();
-    let curr_hand = scoreHand(p1_hand.concat(p2_hand));
-    let dispCurr_hand = document.getElementById("dispCurr_hand");
+    let currHand = scoreHand(p1Hand.concat(p2Hand));
+    let dispCurrHand = document.getElementById("dispCurr_hand");
     let dispOutcome = document.getElementById("dispOutcome");
-    let next_player;
-    dispCurr_hand.textContent = "Actual Hand: " + handToString(curr_hand);
-    if(curr_hand >= curr_bid && curr_player === 1 || curr_hand < curr_bid && curr_player === 2) {
-        p1_life--;
+    let nextPlayer;
+    dispCurrHand.textContent = "Actual Hand: " + handToString(currHand);
+    if(currHand >= currBid && currPlayer === 1 || currHand < currBid && currPlayer === 2) {
+        p1Life--;
         dispOutcome.textContent = "You Lose the Round!"
-        next_player = 1;
+        nextPlayer = 1;
     } else {
-        p2_life--;
+        p2Life--;
         dispOutcome.textContent = "You Win the Round!"
-        next_player = 2;
+        nextPlayer = 2;
     }
     setTimeout(hideP2Hand, 3000);
-    setTimeout(newHand.bind(next_player), 3000);
+    setTimeout(newHand.bind(nextPlayer), 3000);
 }
 
 function p1Move() {
@@ -139,10 +139,10 @@ function p1Move() {
 
 function p2Move() {
     let check = randInt();
-    let temp = [...p2_hand];
-    let p2_score = scoreHand(temp);
-    console.log("p2 score = ", p2_score);
-    if ((check <= 2 && curr_bid > p2_score) || curr_bid == 6) {
+    let temp = [...p2Hand];
+    let p2Score = scoreHand(temp);
+    console.log("p2 score = ", p2Score);
+    if ((check <= 2 && currBid > p2Score) || currBid == 6) {
         displayP2Response(1);
         setTimeout(clearP2_Response, 3000);
         setTimeout(callLiar, 1000);
@@ -154,40 +154,39 @@ function p2Move() {
 }
 
 function randInt() {
-    const minCiel = Math.ceil(7);
-    const maxFloor = Math.floor(0);
-    return Math.floor(Math.random() * (maxFloor - minCiel + 1) + minCiel);
+    const max = 6;
+    return Math.floor(Math.random() * (max + 1));
 }
 
-function newHand(next_player) {
-    if(p1_life === 0 || p2_life === 0) {
+function newHand(nextPlayer) {
+    if(p1Life === 0 || p2Life === 0) {
         restartGame();
     }
     clearRoundEndText();
-    p1_hand = [99, 99, 99, 99, 99];
-    p2_hand = [99, 99, 99, 99, 99];
-    for(let i = 0; i < p1_life; i++) {
-        p1_hand[i] = randInt();
+    p1Hand = [99, 99, 99, 99, 99];
+    p2Hand = [99, 99, 99, 99, 99];
+    for(let i = 0; i < p1Life; i++) {
+        p1Hand[i] = randInt();
     }
-    p1_hand.sort();
-    for(let i = p1_life; i < 5; i++) {
-        p1_hand[i] = 0;
+    p1Hand.sort();
+    for(let i = p1Life; i < 5; i++) {
+        p1Hand[i] = 0;
     }
-    for(let i = 0; i < p2_life; i++) {
-        p2_hand[i] = randInt();
+    for(let i = 0; i < p2Life; i++) {
+        p2Hand[i] = randInt();
     }
-    p2_hand.sort();
-    for(let i = p2_life; i < 5; i++) {
-        p2_hand[i] = 0;
+    p2Hand.sort();
+    for(let i = p2Life; i < 5; i++) {
+        p2Hand[i] = 0;
     }
-    curr_bid = 0;
-    curr_player = next_player;
+    currBid = 0;
+    currPlayer = nextPlayer;
     displayP1Hand();
     displayP1Life();
     displayP2Life();
     hideP2Hand();
     updateBidText();
-    if(next_player === 1){
+    if(nextPlayer === 1){
         p1Move();
     } else {
         p2Move();
@@ -196,36 +195,36 @@ function newHand(next_player) {
 
 function scoreHand(hand) {
     hand.sort();
-    let num_match = [0, 0, 0, 0, 0, 0, 0];
-    num_match[hand[0]]++;
-    let max_match = 1, second_match = 1;
+    let numMatch = [0, 0, 0, 0, 0, 0, 0];
+    numMatch[hand[0]]++;
+    let maxMatch = 1, secondMatch = 1;
     for(let i = 1; i < hand.length; i++) {
         if(hand[i] > 0) {
-            num_match[hand[i]]++;
+            numMatch[hand[i]]++;
         }
     }
     for(let i = 1; i <= 6; i++) {
-        if(num_match[i] > max_match && num_match[i] > second_match) {
-            second_match = max_match;
-            max_match = num_match[i];
+        if(numMatch[i] > maxMatch && numMatch[i] > secondMatch) {
+            secondMatch = maxMatch;
+            maxMatch = numMatch[i];
         }
-        else if (num_match [i] <= max_match && num_match[i] > second_match) {
-            second_match = num_match[i];
+        else if (numMatch [i] <= maxMatch && numMatch[i] > secondMatch) {
+            secondMatch = numMatch[i];
         }
     }
-    console.log(num_match, max_match, second_match)
-    if (max_match == 5) {
+    console.log(numMatch, maxMatch, secondMatch)
+    if (maxMatch == 5) {
         return HAND.FIVE_OF_A_KIND;
-    } else if (max_match === 4) {
+    } else if (maxMatch === 4) {
         return HAND.FOUR_OF_A_KIND;
-    } else if (max_match === 3) {
-        if (second_match >= 2) {
+    } else if (maxMatch === 3) {
+        if (secondMatch >= 2) {
             return HAND.FULL_HOUSE;
         } else {
            return HAND.THREE_OF_A_KIND;
         }
-    } else if (max_match === 2) {
-        if (second_match === 2) {
+    } else if (maxMatch === 2) {
+        if (secondMatch === 2) {
             return HAND.TWO_PAIR;
         } else {
             return HAND.PAIR;
@@ -255,50 +254,50 @@ function handToString(h) {
 }
 
 function displayP2Response(r) {
-    let p2_response = document.getElementById("p2_response");
+    let p2Response = document.getElementById("p2_response");
     if(r == 0) {
-        p2_response.textContent = handToString(curr_bid + 1);
+        p2Response.textContent = handToString(currBid + 1);
     } else {
-        p2_response.textContent = "Liar!";
+        p2Response.textContent = "Liar!";
     }
 }
 
 function clearP2_Response() {
-    let p2_response = document.getElementById("p2_response");
-    p2_response.textContent = "\r\n";
+    let p2Response = document.getElementById("p2_response");
+    p2Response.textContent = "\r\n";
 }
 
 function updateBidText() {
-    dispCurr_bid = document.getElementById("curr_bid");
-    dispCurr_bid.textContent = handToString(curr_bid);
-    if(curr_bid < 8){
-        document.querySelector('#incP1BidButton').textContent = "Increase bid to " + handToString(curr_bid + 1);
+    dispCurrBid = document.getElementById("curr_bid");
+    dispCurrBid.textContent = handToString(currBid);
+    if(currBid < 8){
+        document.getElementById("incP1BidButton").textContent = "Increase bid to " + handToString(currBid + 1);
     } else {
-        document.querySelector('#incP1BidButton').textContent = "Bid already at max!";
-        document.querySelector('#incP1BidButton').disabled = false;
+        document.getElementById("incP1BidButton").textContent = "Bid already at max!";
+        document.getElementById("incP1BidButton").disabled = false;
     }
     
 }
 
 function clearRoundEndText() {
-    let dispCurr_hand = document.getElementById("dispCurr_hand");
+    let dispCurrHand = document.getElementById("dispCurr_hand");
     let dispOutcome = document.getElementById("dispOutcome");
     dispOutcome.textContent = "";
-    dispCurr_hand.textContent = "";
+    dispCurrHand.textContent = "";
 }
 
 function logGameState() {
-    console.log(p1_life, p1_hand);
-    console.log(p2_life, p2_hand);
-    console.log(curr_bid, curr_player);
+    console.log(p1Life, p1Hand);
+    console.log(p2Life, p2Hand);
+    console.log(currBid, currPlayer);
 }
 
 function enableP1Inputs(){
-    document.querySelector('#incP1BidButton').disabled = false;
-    document.querySelector('#p1CallLiarButton').disabled = false;
+    document.getElementById("incP1BidButton").disabled = false;
+    document.getElementById("p1CallLiarButton").disabled = false;
 }
 
 function disableP1Inputs(){
-    document.querySelector('#incP1BidButton').disabled = true;
-    document.querySelector('#p1CallLiarButton').disabled = true;
+    document.getElementById("incP1BidButton").disabled = true;
+    document.getElementById("p1CallLiarButton").disabled = true;
 }
