@@ -64,6 +64,11 @@ body {
 
 #incP1BidButton, #p1CallLiarButton {
     background: #09bc36;
+    border-style: solid;
+    width: 10vw;
+    height: 3em;
+    margin-right: 1em;
+    border-radius: 1em;
 }
 
 #incP1BidButton:hover, #p1CallLiarButton:hover{

@@ -67,7 +67,7 @@ function displayP1Hand() {
 
 function displayP1Life() {
     p1_displife = document.getElementById("p1_life_count");
-    p1_displife.innerHTML = p1_life;
+    p1_displife.textContent = p1_life;
 }
 
 function hideP2Hand() {
@@ -108,7 +108,7 @@ function numToDiceImage(n) {
 
 function displayP2Life() {
     p2_displife = document.getElementById("p2_life_count");
-    p2_displife.innerHTML = p2_life;
+    p2_displife.textContent = p2_life;
 }
 
 function callLiar() {
@@ -118,14 +118,14 @@ function callLiar() {
     let dispCurr_hand = document.getElementById("dispCurr_hand");
     let dispOutcome = document.getElementById("dispOutcome");
     let next_player;
-    dispCurr_hand.innerHTML = "Actual Hand: " + handToString(curr_hand);
+    dispCurr_hand.textContent = "Actual Hand: " + handToString(curr_hand);
     if(curr_hand >= curr_bid && curr_player === 1 || curr_hand < curr_bid && curr_player === 2) {
         p1_life--;
-        dispOutcome.innerHTML = "You Lose the Round!"
+        dispOutcome.textContent = "You Lose the Round!"
         next_player = 1;
     } else {
         p2_life--;
-        dispOutcome.innerHTML = "You Win the Round!"
+        dispOutcome.textContent = "You Win the Round!"
         next_player = 2;
     }
     setTimeout(hideP2Hand, 3000);
@@ -257,24 +257,24 @@ function handToString(h) {
 function displayP2Response(r) {
     let p2_response = document.getElementById("p2_response");
     if(r == 0) {
-        p2_response.innerHTML = handToString(curr_bid + 1);
+        p2_response.textContent = handToString(curr_bid + 1);
     } else {
-        p2_response.innerHTML = "Liar!";
+        p2_response.textContent = "Liar!";
     }
 }
 
 function clearP2_Response() {
     let p2_response = document.getElementById("p2_response");
-    p2_response.innerHTML = "&#10;&#13;";
+    p2_response.textContent = "\r\n";
 }
 
 function updateBidText() {
     dispCurr_bid = document.getElementById("curr_bid");
-    dispCurr_bid.innerHTML = handToString(curr_bid);
+    dispCurr_bid.textContent = handToString(curr_bid);
     if(curr_bid < 8){
-        document.querySelector('#incP1BidButton').innerHTML = "Increase bid to " + handToString(curr_bid + 1);
+        document.querySelector('#incP1BidButton').textContent = "Increase bid to " + handToString(curr_bid + 1);
     } else {
-        document.querySelector('#incP1BidButton').innerHTML = "Bid already at max!";
+        document.querySelector('#incP1BidButton').textContent = "Bid already at max!";
         document.querySelector('#incP1BidButton').disabled = false;
     }
     
@@ -283,8 +283,8 @@ function updateBidText() {
 function clearRoundEndText() {
     let dispCurr_hand = document.getElementById("dispCurr_hand");
     let dispOutcome = document.getElementById("dispOutcome");
-    dispOutcome.innerHTML = "";
-    dispCurr_hand.innerHTML = "";
+    dispOutcome.textContent = "";
+    dispCurr_hand.textContent = "";
 }
 
 function logGameState() {

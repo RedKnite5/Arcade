@@ -81,7 +81,7 @@ section {
 
 
 /* desktop */
-@media (min-width: 50rem) {
+@media (min-width: 800px) {
     .chess-game {
         flex-direction: row;
     }
@@ -108,7 +108,7 @@ section {
 }
 
 /* mobile */
-@media (max-width: 50rem) {
+@media (max-width: 800px) {
     h3 {
         max-width: 5rem;
         font-size: small;
