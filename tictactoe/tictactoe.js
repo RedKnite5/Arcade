@@ -119,10 +119,8 @@ const miniMax = () => {
   let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   for (let i = 0; i < 9; i++) {
     if (board[i] != "x" && board[i] != "o") {
-      console.log("minimax checking square ", i);
       board[i] = "o";
       if (miniMaxVictoryCheck(board)) {
-        console.log("winning move found:", board);
         return i;
       } else {
         move_outcomes[i] = -minValue([...board]);
@@ -132,7 +130,6 @@ const miniMax = () => {
       move_outcomes[i] = -2;
     }
   }
-  console.log(move_outcomes);
   let max = -2;
   let ret;
   for (let i = 0; i < move_outcomes.length; i++) {
@@ -146,10 +143,8 @@ const miniMax = () => {
 
 function minValue(board) {
   let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-  console.log(board);
   for (let i = 0; i < 9; i++) {
     if (board[i] == undefined) {
-      console.log("min checking square ", i);
       board[i] = "x";
       if (miniMaxVictoryCheck(board)) {
         return 1;
@@ -175,18 +170,15 @@ function minValue(board) {
 function miniMaxVictoryCheck(t_board) {
   for (let i = 0; i < 3; i++) {
     if (t_board[i] != undefined && t_board[i] == t_board[i + 3] && t_board[i + 3] == t_board[i + 6]) {
-      console.log("vertical win found, col ", i);
       return true;
     }
   }
   for (let i = 0; i < 9; i += 3) {
     if (t_board[i] != undefined && t_board[i] == t_board[i + 1] && t_board[i + 1] == t_board[i + 2]) {
-      console.log("horizontal win found, row ", i);
       return true;
     }
   }
   if (t_board[4] != undefined && ((t_board[0] == t_board[4] && t_board[4] == t_board[8]) || (t_board[2] == t_board[4] && t_board[4] == t_board[6]))) {
-    console.log("diagonal win found");
     return true;
   } else {
     return false;
