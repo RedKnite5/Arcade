@@ -196,10 +196,13 @@ const handleCellClick = (e) => {
   if (xIsNext) {
     classList.add("x");
     checkGameStatus();
-    const aiMove = miniMax();
-    cellDivs[aiMove].classList.add("o");
-    checkGameStatus();
-    console.log("aiMove: ", aiMove);
+    const mode = document.querySelector("input[name='mode']:checked").value;
+    if (mode === "Single Player") {
+      const aiMove = miniMax();
+      cellDivs[aiMove].classList.add("o");
+      checkGameStatus();
+      console.log("aiMove: ", aiMove);
+    }
   } else {
     classList.add("o");
     checkGameStatus();

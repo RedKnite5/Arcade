@@ -61,6 +61,35 @@
   width: 200px;
 }
 
+.mode-selection {
+  display: flex;
+  margin-top: 1em;
+  justify-content: center;
+}
+
+.radio-mode {
+  margin-left: 1em;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+  accent-color: #0DA192;
+}
+
+.mode-label {
+  font-size: 25px;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+  border-radius: 50%;
+}
+
 .x,
 .o {
   cursor: default;
