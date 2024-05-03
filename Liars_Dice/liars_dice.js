@@ -17,12 +17,12 @@ let p2Life = 0;
 let currBid = 1;
 let currPlayer = 1;
 
-const p1Disphand = [];
-const p2Disphand = [];
+var p1Disphand = [];
+var p2Disphand = [];
 
-let p1Displife = 0;
-let p2Displife = 0;
-let dispCurrBid = 0;
+var p1Displife = 0;
+var p2Displife = 0;
+var dispCurrBid = 0;
 
 addEventListener("load", initDispElements);
 addEventListener("load", restartGame);
@@ -60,7 +60,7 @@ function increaseBidAndPass() {
 }
 
 function displayP1Hand() {
-    for (let i = 0; i < 5; i++) {
+    for(let i = 0; i < 5; i++){
         p1Disphand[i].src = numToDiceImage(p1Hand[i]);
     }
 }
@@ -71,25 +71,39 @@ function displayP1Life() {
 }
 
 function hideP2Hand() {
-    for (let i = 0; i < p2Life; i++) {
+    for(let i = 0; i < p2Life; i++){
         p2Disphand[i].src = "dice_unknown.png";
     }
-    for (let i = p2Life; i < 5; i++) {
+    for(let i = p2Life; i < 5; i++){
         p2Disphand[i].src = "dice_0.png"
     }
 }
 
 function displayP2Hand() {
-    for (let i = 0; i < 5; i++) {
+    for(let i = 0; i < 5; i++){
         p2Disphand[i].src = numToDiceImage(p2Hand[i]);
     }
 }
 
 function numToDiceImage(n) {
-    if (0 <= n && n <= 6) {
-        return "dice_" + n.toString() + ".png";
+    switch(n){
+        case 0:
+            return "dice_0.png";
+        case 1:
+            return "dice_1.png";
+        case 2:
+            return "dice_2.png";
+        case 3:
+            return "dice_3.png";
+        case 4:
+            return "dice_4.png";
+        case 5:
+            return "dice_5.png";
+        case 6:
+            return "dice_6.png";
+        default:
+            return "dice_unknown.png";
     }
-    return "dice_unknown.png";
 }
 
 function displayP2Life() {
@@ -100,12 +114,12 @@ function displayP2Life() {
 function callLiar() {
     disableP1Inputs();
     displayP2Hand();
-    const currHand = scoreHand(p1Hand.concat(p2Hand));
-    const dispCurrHand = document.getElementById("dispCurr_hand");
-    const dispOutcome = document.getElementById("dispOutcome");
+    let currHand = scoreHand(p1Hand.concat(p2Hand));
+    let dispCurrHand = document.getElementById("dispCurr_hand");
+    let dispOutcome = document.getElementById("dispOutcome");
     let nextPlayer;
     dispCurrHand.textContent = "Actual Hand: " + handToString(currHand);
-    if (currHand >= currBid && currPlayer === 1 || currHand < currBid && currPlayer === 2) {
+    if(currHand >= currBid && currPlayer === 1 || currHand < currBid && currPlayer === 2) {
         p1Life--;
         dispOutcome.textContent = "You Lose the Round!"
         nextPlayer = 1;
@@ -114,6 +128,7 @@ function callLiar() {
         dispOutcome.textContent = "You Win the Round!"
         nextPlayer = 2;
     }
+
     setTimeout(hideP2Hand, 3000);
     setTimeout(newHand.bind(nextPlayer), 3000);
 }
@@ -124,9 +139,9 @@ function p1Move() {
 }
 
 function p2Move() {
-    const check = randInt();
-    const temp = [...p2Hand];
-    const p2Score = scoreHand(temp);
+    let check = randInt();
+    let temp = [...p2Hand];
+    let p2Score = scoreHand(temp);
     console.log("p2 score = ", p2Score);
     if ((check <= 2 && currBid > p2Score) || currBid == 6) {
         displayP2Response(1);
@@ -146,24 +161,30 @@ function randInt() {
 }
 
 function newHand(nextPlayer) {
-    if (p1Life === 0 || p2Life === 0) {
-        restartGame();
+    if(p1Life === 0 || p2Life === 0) {
+        if(p1Life == 0) {
+            document.getElementById("dispOutcome").innerHTML = "YOU LOSE!";
+        } else if (p2Life == 0) {
+            document.getElementById("dispOutcome").innerHTML = "YOU WIN!";
+        }
+        setTimeout(restartGame, 3000);
+        return;
     }
     clearRoundEndText();
     p1Hand = [99, 99, 99, 99, 99];
     p2Hand = [99, 99, 99, 99, 99];
-    for (let i = 0; i < p1Life; i++) {
+    for(let i = 0; i < p1Life; i++) {
         p1Hand[i] = randInt();
     }
     p1Hand.sort();
-    for (let i = p1Life; i < 5; i++) {
+    for(let i = p1Life; i < 5; i++) {
         p1Hand[i] = 0;
     }
-    for (let i = 0; i < p2Life; i++) {
+    for(let i = 0; i < p2Life; i++) {
         p2Hand[i] = randInt();
     }
     p2Hand.sort();
-    for (let i = p2Life; i < 5; i++) {
+    for(let i = p2Life; i < 5; i++) {
         p2Hand[i] = 0;
     }
     currBid = 0;
@@ -173,7 +194,7 @@ function newHand(nextPlayer) {
     displayP2Life();
     hideP2Hand();
     updateBidText();
-    if (nextPlayer === 1){
+    if(nextPlayer === 1){
         p1Move();
     } else {
         p2Move();
@@ -182,17 +203,16 @@ function newHand(nextPlayer) {
 
 function scoreHand(hand) {
     hand.sort();
-    const numMatch = [0, 0, 0, 0, 0, 0, 0];
+    let numMatch = [0, 0, 0, 0, 0, 0, 0];
     numMatch[hand[0]]++;
-    let maxMatch = 1
-    let secondMatch = 1;
-    for (let i = 1; i < hand.length; i++) {
-        if (hand[i] > 0) {
+    let maxMatch = 1, secondMatch = 1;
+    for(let i = 1; i < hand.length; i++) {
+        if(hand[i] > 0) {
             numMatch[hand[i]]++;
         }
     }
-    for (let i = 1; i <= 6; i++) {
-        if (numMatch[i] > maxMatch && numMatch[i] > secondMatch) {
+    for(let i = 1; i <= 6; i++) {
+        if(numMatch[i] > maxMatch && numMatch[i] > secondMatch) {
             secondMatch = maxMatch;
             maxMatch = numMatch[i];
         }
@@ -242,8 +262,8 @@ function handToString(h) {
 }
 
 function displayP2Response(r) {
-    const p2Response = document.getElementById("p2_response");
-    if (r === 0) {
+    let p2Response = document.getElementById("p2_response");
+    if(r == 0) {
         p2Response.textContent = handToString(currBid + 1);
     } else {
         p2Response.textContent = "Liar!";
@@ -251,14 +271,14 @@ function displayP2Response(r) {
 }
 
 function clearP2_Response() {
-    const p2Response = document.getElementById("p2_response");
+    let p2Response = document.getElementById("p2_response");
     p2Response.textContent = "\r\n";
 }
 
 function updateBidText() {
     dispCurrBid = document.getElementById("curr_bid");
     dispCurrBid.textContent = handToString(currBid);
-    if (currBid < 8){
+    if(currBid < 6){
         document.getElementById("incP1BidButton").textContent = "Increase bid to " + handToString(currBid + 1);
     } else {
         document.getElementById("incP1BidButton").textContent = "Bid already at max!";
@@ -268,8 +288,8 @@ function updateBidText() {
 }
 
 function clearRoundEndText() {
-    const dispCurrHand = document.getElementById("dispCurr_hand");
-    const dispOutcome = document.getElementById("dispOutcome");
+    let dispCurrHand = document.getElementById("dispCurr_hand");
+    let dispOutcome = document.getElementById("dispOutcome");
     dispOutcome.textContent = "";
     dispCurrHand.textContent = "";
 }
