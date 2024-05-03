@@ -620,6 +620,8 @@ function restart() {
 
     const modal = get("victory-modal");
     modal.style.display = "none";
+
+    whitesTurn = true;
 }
 
 function takePiece(piece) {
