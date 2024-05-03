@@ -1,7 +1,9 @@
 "use strict";
 
+const BOARD_SIZE = 8;
 const letters = "abcdefgh";
 const turns = true;
+
 
 let whitesTurn = true;
 let enPassant = null;
@@ -16,7 +18,7 @@ function setup() {
 function setupChess() {
     const board = get("board");
 
-    for (let i = 0; i < 8; i++) {
+    for (let i = 0; i < BOARD_SIZE; i++) {
         const row = makeRow(i);
         board.appendChild(row);
     }
@@ -83,7 +85,7 @@ function makeRow(i) {
     row.style.overflow = "hidden";
     row.className = "row";
 
-    for (let j = 0; j < 8; j++) {
+    for (let j = 0; j < BOARD_SIZE; j++) {
         const square = makeSquare(j, i);
         row.appendChild(square);
     }
@@ -92,7 +94,7 @@ function makeRow(i) {
 
 function makeSquare(j, i) {
     const square = document.createElement("div");
-    square.id = makeId(j, 8 - i);
+    square.id = makeId(j, BOARD_SIZE - i);
 
     square.style.flexGrow = 1;
     square.style.flexBasis = 0;
@@ -260,7 +262,7 @@ function pawnMv(data, dest) {
             enPassant = null;
         }
 
-        if (destY === 1 || destY === 8) {
+        if (destY === 1 || destY === BOARD_SIZE) {
             const promotionModal = get("promotion-modal-" + pieceColor);
             promotionModal.style.display = "block";
             makePromotionOptions(pieceColor, get(pieceId));
@@ -405,7 +407,7 @@ function addDir(x, y, xDir, yDir) {
     const arr = [];
     let open = true;
     let i = 1;
-    while (i < 8 && open) {
+    while (i < BOARD_SIZE && open) {
         const nextId = makeId(x + xDir * i, y + yDir * i);
         const next = get(nextId);
         open = freeSquare(next);
