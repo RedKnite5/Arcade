@@ -119,46 +119,49 @@ const miniMax = () => {
   let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   for (let i = 0; i < 9; i++) {
     if (board[i] != "x" && board[i] != "o") {
-      board[i] == "o";
+      console.log("minimax checking square ", i);
+      board[i] = "o";
       if (miniMaxVictoryCheck(board)) {
-        return 1;
+        console.log("winning move found:", board);
+        return i;
       } else {
-        move_outcomes[i] = minValue([...board]);
+        move_outcomes[i] = -minValue([...board]);
       }
-      board[i] = "";
+      board[i] = undefined;
     } else {
-      board[i] = -2;
+      move_outcomes[i] = -2;
     }
   }
-  if (move_outcomes != [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
-    let max = -1;
-    let ret = 0;
-    for (let i = 0; i < move_outcomes.length; i++) {
-      if (move_outcomes[i] > max) {
-        max = move_outcomes[i];
-        ret = i;
-      }
+  console.log(move_outcomes);
+  let max = -2;
+  let ret;
+  for (let i = 0; i < move_outcomes.length; i++) {
+    if (move_outcomes[i] > max) {
+      max = move_outcomes[i];
+      ret = i;
     }
-    return ret;
   }
-};
+  return ret;
+}; 
 
 function minValue(board) {
   let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
+  console.log(board);
   for (let i = 0; i < 9; i++) {
-    if (board[i] != "x" && board[i] != "o") {
-      board[i] == "x";
+    if (board[i] == undefined) {
+      console.log("min checking square ", i);
+      board[i] = "x";
       if (miniMaxVictoryCheck(board)) {
-        return -1;
+        return 1;
       } else {
-        move_outcomes[i] = maxValue([...board]);
+        move_outcomes[i] = 0
       }
-      board[i] = "";
+      board[i] = undefined;
     } else {
-      board[i] = 2
+      move_outcomes[i] = 2
     }
   }
-  if (move_outcomes != [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
+  if (move_outcomes != [2, 2, 2, 2, 2, 2, 2, 2, 2]) {
     let min = 2;
     for (let i = 0; i < move_outcomes.length; i++) {
       if (move_outcomes[i] < min) {
@@ -169,44 +172,21 @@ function minValue(board) {
   }
 }
 
-function maxValue(board) {
-  let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-  for (let i = 0; i < 9; i++) {
-    if (board[i] != "x" && board[i] != "o"){
-      board[i] == "o";
-      if (miniMaxVictoryCheck(board)) {
-        return 1;
-      } else {
-        move_outcomes[i] = minValue([...board]);
-      }
-      board[i] = "";
-    } else {
-      board[i] = -2;
-    }
-  }
-  if (move_outcomes != [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
-    let max = -2;
-    for (let i = 0; i < move_outcomes.length; i++) {
-      if (move_outcomes[i] > max) {
-        max = move_outcomes[i];
-      }
-    }
-    return max;
-  }
-}
-
-function miniMaxVictoryCheck(board) {
+function miniMaxVictoryCheck(t_board) {
   for (let i = 0; i < 3; i++) {
-    if (board[i] == board[i + 3] && board[i + 3] == board[i + 6]) {
+    if (t_board[i] != undefined && t_board[i] == t_board[i + 3] && t_board[i + 3] == t_board[i + 6]) {
+      console.log("vertical win found, col ", i);
       return true;
     }
   }
-  for (let i = 0; i < 3; i++) {
-    if (board[i] == board[i + 1] && board[i + 1] == board[i + 2]) {
+  for (let i = 0; i < 9; i += 3) {
+    if (t_board[i] != undefined && t_board[i] == t_board[i + 1] && t_board[i + 1] == t_board[i + 2]) {
+      console.log("horizontal win found, row ", i);
       return true;
     }
   }
-  if ((board[0] == board[4] && board[4] == board[8]) || (board[2] == board[4] && board[4] == board[6])) {
+  if (t_board[4] != undefined && ((t_board[0] == t_board[4] && t_board[4] == t_board[8]) || (t_board[2] == t_board[4] && t_board[4] == t_board[6]))) {
+    console.log("diagonal win found");
     return true;
   } else {
     return false;
@@ -226,8 +206,8 @@ const handleCellClick = (e) => {
     checkGameStatus();
     const aiMove = miniMax();
     cellDivs[aiMove].classList.add("o");
+    checkGameStatus();
     console.log("aiMove: ", aiMove);
-    xIsNext = !xIsNext;
   } else {
     classList.add("o");
     checkGameStatus();
