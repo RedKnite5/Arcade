@@ -118,7 +118,7 @@ const miniMax = () => {
   }
   let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   for (let i = 0; i < 9; i++) {
-    if (board[i] != "x" && board[i] != "o") {
+    if (board[i] !== "x" && board[i] !== "o") {
       board[i] = "o";
       if (miniMaxVictoryCheck(board)) {
         return i;
@@ -144,7 +144,7 @@ const miniMax = () => {
 function minValue(board) {
   let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   for (let i = 0; i < 9; i++) {
-    if (board[i] == undefined) {
+    if (board[i] === undefined) {
       board[i] = "x";
       if (miniMaxVictoryCheck(board)) {
         return 1;
@@ -169,20 +169,29 @@ function minValue(board) {
 
 function miniMaxVictoryCheck(t_board) {
   for (let i = 0; i < 3; i++) {
-    if (t_board[i] != undefined && t_board[i] == t_board[i + 3] && t_board[i + 3] == t_board[i + 6]) {
+    if (sameAndDefined(t_board[i], t_board[i + 3], t_board[i + 6])) {
       return true;
     }
   }
   for (let i = 0; i < 9; i += 3) {
-    if (t_board[i] != undefined && t_board[i] == t_board[i + 1] && t_board[i + 1] == t_board[i + 2]) {
+    if (sameAndDefined(t_board[i], t_board[i + 1], t_board[i + 2])) {
       return true;
     }
   }
-  if (t_board[4] != undefined && ((t_board[0] == t_board[4] && t_board[4] == t_board[8]) || (t_board[2] == t_board[4] && t_board[4] == t_board[6]))) {
+  const pos_diag = sameAndDefined(t_board[4], t_board[0], t_board[8]);
+  const neg_diag = sameAndDefined(t_board[4], t_board[2], t_board[6])
+  if (pos_diag || neg_diag) {
     return true;
   } else {
     return false;
   }
+}
+
+function sameAndDefined(x, y, z) {
+  if (x === undefined || x === null) {
+    return false;
+  }
+  return x === y && x === z;
 }
 
 const handleCellClick = (e) => {
