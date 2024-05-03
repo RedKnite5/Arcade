@@ -24,8 +24,6 @@ function setupChess() {
     window.addEventListener('resize', resize_pieces, true);
 
     get("restart").onclick = restart;
-
-    //win("l");
 }
 
 function addPieces() {

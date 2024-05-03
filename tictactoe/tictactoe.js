@@ -113,16 +113,14 @@ const handleReset = () => {
 const miniMax = () => {
   const board = [];
   const cellDivs = document.querySelectorAll(".game-cell");
-  for(let i = 0; i < 9; i++)
-  {
+  for (let i = 0; i < 9; i++) {
     board.push(cellDivs[i].classList[1]);
   }
   let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-  for(let i = 0; i < 9; i++)
-  {
-    if(board[i] != "x" && board[i] != "o"){
+  for (let i = 0; i < 9; i++) {
+    if (board[i] != "x" && board[i] != "o") {
       board[i] == "o";
-      if(miniMaxVictoryCheck(board)) {
+      if (miniMaxVictoryCheck(board)) {
         return 1;
       } else {
         move_outcomes[i] = minValue([...board]);
@@ -132,26 +130,25 @@ const miniMax = () => {
       board[i] = -2;
     }
   }
-  if(move_outcomes != [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
-    let max = -1, ret = 0;
-    for(let i = 0; i < move_outcomes.length; i++)
-    {
-      if(move_outcomes[i] > max) {
-        max = move_outcomes[i]
+  if (move_outcomes != [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
+    let max = -1;
+    let ret = 0;
+    for (let i = 0; i < move_outcomes.length; i++) {
+      if (move_outcomes[i] > max) {
+        max = move_outcomes[i];
         ret = i;
       }
     }
     return ret;
   }
-}
+};
 
 function minValue(board) {
   let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-  for(let i = 0; i < 9; i++)
-  {
-    if(board[i] != "x" && board[i] != "o"){
+  for (let i = 0; i < 9; i++) {
+    if (board[i] != "x" && board[i] != "o") {
       board[i] == "x";
-      if(miniMaxVictoryCheck(board)) {
+      if (miniMaxVictoryCheck(board)) {
         return -1;
       } else {
         move_outcomes[i] = maxValue([...board]);
@@ -161,12 +158,11 @@ function minValue(board) {
       board[i] = 2
     }
   }
-  if(move_outcomes != [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
+  if (move_outcomes != [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
     let min = 2;
-    for(let i = 0; i < move_outcomes.length; i++)
-    {
-      if(move_outcomes[i] < min) {
-        min = move_outcomes[i]
+    for (let i = 0; i < move_outcomes.length; i++) {
+      if (move_outcomes[i] < min) {
+        min = move_outcomes[i];
       }
     }
     return min;
@@ -175,11 +171,10 @@ function minValue(board) {
 
 function maxValue(board) {
   let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
-  for(let i = 0; i < 9; i++)
-  {
-    if(board[i] != "x" && board[i] != "o"){
+  for (let i = 0; i < 9; i++) {
+    if (board[i] != "x" && board[i] != "o"){
       board[i] == "o";
-      if(miniMaxVictoryCheck(board)) {
+      if (miniMaxVictoryCheck(board)) {
         return 1;
       } else {
         move_outcomes[i] = minValue([...board]);
@@ -189,12 +184,11 @@ function maxValue(board) {
       board[i] = -2;
     }
   }
-  if(move_outcomes != [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
+  if (move_outcomes != [0, 0, 0, 0, 0, 0, 0, 0, 0]) {
     let max = -2;
-    for(let i = 0; i < move_outcomes.length; i++)
-    {
-      if(move_outcomes[i] > max) {
-        max = move_outcomes[i]
+    for (let i = 0; i < move_outcomes.length; i++) {
+      if (move_outcomes[i] > max) {
+        max = move_outcomes[i];
       }
     }
     return max;
@@ -202,17 +196,17 @@ function maxValue(board) {
 }
 
 function miniMaxVictoryCheck(board) {
-  for(let i = 0; i < 3; i++) {
-    if(board[i] == board[i + 3] && board[i + 3] == board[i + 6]){
+  for (let i = 0; i < 3; i++) {
+    if (board[i] == board[i + 3] && board[i + 3] == board[i + 6]) {
       return true;
     }
   }
-  for(let i = 0; i < 3; i++) {
-    if(board[i] == board[i + 1] && board[i + 1] == board[i + 2]){
+  for (let i = 0; i < 3; i++) {
+    if (board[i] == board[i + 1] && board[i + 1] == board[i + 2]) {
       return true;
     }
   }
-  if((board[0] == board[4] && board[4] == board[8]) || (board[2] == board[4] && board[4] == board[6])){
+  if ((board[0] == board[4] && board[4] == board[8]) || (board[2] == board[4] && board[4] == board[6])) {
     return true;
   } else {
     return false;
@@ -221,6 +215,7 @@ function miniMaxVictoryCheck(board) {
 
 const handleCellClick = (e) => {
   const classList = e.target.classList;
+  const cellDivs = document.querySelectorAll(".game-cell");
 
   if (!gameIsLive || classList[1] === "x" || classList[1] === "o") {
     return;
@@ -229,6 +224,10 @@ const handleCellClick = (e) => {
   if (xIsNext) {
     classList.add("x");
     checkGameStatus();
+    const aiMove = miniMax();
+    cellDivs[aiMove].classList.add("o");
+    console.log("aiMove: ", aiMove);
+    xIsNext = !xIsNext;
   } else {
     classList.add("o");
     checkGameStatus();
