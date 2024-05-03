@@ -2,7 +2,7 @@ body {
     background-color: #068229;
 }
 
-header {
+.game-header {
     background: linear-gradient(-45deg, #f7dd6c, #f3e69c, #c6c7be, #bec7c7);
     background-size: 400% 200%;
     animation: gradient 15s linear infinite;
@@ -40,16 +40,16 @@ body {
 .bid_tracker {
     margin: auto;
     width: 50%;
-    height: 45px;
-    padding: 25px;
+    height: 4em;
+    padding: 1em;
     text-align: center;
 }
 
 .response_box {
     margin: auto;
     width: 50%;
-    height: 15px;
-    padding: 25px;
+    height: 1em;
+    padding: 1.5em;
     text-align: center;
 }
 
@@ -58,20 +58,20 @@ body {
     flex-direction: row;
     flex-wrap: nowrap;
     align-items: center;
-    width: 50%;
+    width: 60%;
     margin: auto;
 }
 
-#incP1BidButton, #p1CallLiarButton {
+.responseButton {
     background: #09bc36;
     border-style: solid;
-    width: 10vw;
+    width: 30em;
     height: 3em;
     margin-right: 1em;
     border-radius: 1em;
 }
 
-#incP1BidButton:hover, #p1CallLiarButton:hover{
+.responseButton:hover{
     background:#f7dd6c;
 }
 

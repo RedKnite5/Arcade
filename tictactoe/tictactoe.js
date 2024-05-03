@@ -1,5 +1,9 @@
 "use strict";
 
+// Credit to Justin Kim, angle943 on GitHub, for the
+// parts of this code
+// https://github.com/angle943/tic-tac-toe
+
 const xSymbol = '×';
 const oSymbol = '○';
 

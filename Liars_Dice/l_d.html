@@ -2,11 +2,13 @@
 <html lang="en">
     <head>
         <title>Liar's Dice</title>
+        <link rel="stylesheet" href="../style.css">
         <link rel="stylesheet" href="ld_ss.css">
         <script src="liars_dice.js"></script>
     </head>
     <body>
-        <header>
+        <main class="not-footer">
+        <header class="game-header">
             <h1>Liar's Dice</h1>
         </header>
         <div class = "liars_dice">
@@ -67,9 +69,13 @@
                 </div>
             </div>
             <div class = "p1_responses">
-                <button id = "incP1BidButton" type = "button" onclick="increaseBidAndPass()">?</incP1BidButton>
-                <button id = "p1CallLiarButton" onclick="callLiar()">Call Liar</button>
+                <button id = "incP1BidButton" class="responseButton" type = "button" onclick="increaseBidAndPass()">?</incP1BidButton>
+                <button id = "p1CallLiarButton" class="responseButton" onclick="callLiar()">Call Liar</button>
             </div>
         </div>
+    </main>
+    <footer>
+        © 2024 Max Friedman and Jonathan Cozza
+    </footer>
     </body>
 </html>
