@@ -4,19 +4,19 @@
 // parts of this code
 // https://github.com/angle943/tic-tac-toe
 
-const xSymbol = '×';
-const oSymbol = '○';
+const xSymbol = "×";
+const oSymbol = "○";
 
 let gameIsLive = true;
 let xIsNext = true;
 
 
-const letterToSymbol = (letter) => letter === 'x' ? xSymbol : oSymbol;
+const letterToSymbol = (letter) => letter === "x" ? xSymbol : oSymbol;
 
 const handleWin = (letter) => {
-  const statusDiv = document.querySelector('.status');
+  const statusDiv = document.querySelector(".status");
   gameIsLive = false;
-  if (letter === 'x') {
+  if (letter === "x") {
     statusDiv.textContent = `${letterToSymbol(letter)} has won!`;
     statusDiv.style.color = "#545454";
   } else {
@@ -26,8 +26,8 @@ const handleWin = (letter) => {
 };
 
 const checkGameStatus = () => {
-  const cellDivs = document.querySelectorAll('.game-cell');
-  const statusDiv = document.querySelector('.status');
+  const cellDivs = document.querySelectorAll(".game-cell");
+  const statusDiv = document.querySelector(".status");
   const topLeft = cellDivs[0].classList[1];
   const topMiddle = cellDivs[1].classList[1];
   const topRight = cellDivs[2].classList[1];
@@ -41,47 +41,47 @@ const checkGameStatus = () => {
   // check winner
   if (topLeft && topLeft === topMiddle && topLeft === topRight) {
     handleWin(topLeft);
-    cellDivs[0].classList.add('won');
-    cellDivs[1].classList.add('won');
-    cellDivs[2].classList.add('won');
+    cellDivs[0].classList.add("won");
+    cellDivs[1].classList.add("won");
+    cellDivs[2].classList.add("won");
   } else if (middleLeft && middleLeft === middleMiddle && middleLeft === middleRight) {
     handleWin(middleLeft);
-    cellDivs[3].classList.add('won');
-    cellDivs[4].classList.add('won');
-    cellDivs[5].classList.add('won');
+    cellDivs[3].classList.add("won");
+    cellDivs[4].classList.add("won");
+    cellDivs[5].classList.add("won");
   } else if (bottomLeft && bottomLeft === bottomMiddle && bottomLeft === bottomRight) {
     handleWin(bottomLeft);
-    cellDivs[6].classList.add('won');
-    cellDivs[7].classList.add('won');
-    cellDivs[8].classList.add('won');
+    cellDivs[6].classList.add("won");
+    cellDivs[7].classList.add("won");
+    cellDivs[8].classList.add("won");
   } else if (topLeft && topLeft === middleLeft && topLeft === bottomLeft) {
     handleWin(topLeft);
-    cellDivs[0].classList.add('won');
-    cellDivs[3].classList.add('won');
-    cellDivs[6].classList.add('won');
+    cellDivs[0].classList.add("won");
+    cellDivs[3].classList.add("won");
+    cellDivs[6].classList.add("won");
   } else if (topMiddle && topMiddle === middleMiddle && topMiddle === bottomMiddle) {
     handleWin(topMiddle);
-    cellDivs[1].classList.add('won');
-    cellDivs[4].classList.add('won');
-    cellDivs[7].classList.add('won');
+    cellDivs[1].classList.add("won");
+    cellDivs[4].classList.add("won");
+    cellDivs[7].classList.add("won");
   } else if (topRight && topRight === middleRight && topRight === bottomRight) {
     handleWin(topRight);
-    cellDivs[2].classList.add('won');
-    cellDivs[5].classList.add('won');
-    cellDivs[8].classList.add('won');
+    cellDivs[2].classList.add("won");
+    cellDivs[5].classList.add("won");
+    cellDivs[8].classList.add("won");
   } else if (topLeft && topLeft === middleMiddle && topLeft === bottomRight) {
     handleWin(topLeft);
-    cellDivs[0].classList.add('won');
-    cellDivs[4].classList.add('won');
-    cellDivs[8].classList.add('won');
+    cellDivs[0].classList.add("won");
+    cellDivs[4].classList.add("won");
+    cellDivs[8].classList.add("won");
   } else if (topRight && topRight === middleMiddle && topRight === bottomLeft) {
     handleWin(topRight);
-    cellDivs[2].classList.add('won');
-    cellDivs[4].classList.add('won');
-    cellDivs[6].classList.add('won');
+    cellDivs[2].classList.add("won");
+    cellDivs[4].classList.add("won");
+    cellDivs[6].classList.add("won");
   } else if (topLeft && topMiddle && topRight && middleLeft && middleMiddle && middleRight && bottomLeft && bottomMiddle && bottomRight) {
     gameIsLive = false;
-    statusDiv.textContent = 'Game is tied!';
+    statusDiv.textContent = "Game is tied!";
   } else {
     xIsNext = !xIsNext;
     if (xIsNext) {
@@ -97,22 +97,22 @@ const checkGameStatus = () => {
 
 // event Handlers
 const handleReset = () => {
-  const cellDivs = document.querySelectorAll('.game-cell');
-  const statusDiv = document.querySelector('.status');
+  const cellDivs = document.querySelectorAll(".game-cell");
+  const statusDiv = document.querySelector(".status");
   xIsNext = true;
   statusDiv.textContent = `${xSymbol} is next`;
   statusDiv.style.color = "#545454";
   for (const cellDiv of cellDivs) {
-    cellDiv.classList.remove('x');
-    cellDiv.classList.remove('o');
-    cellDiv.classList.remove('won');
+    cellDiv.classList.remove("x");
+    cellDiv.classList.remove("o");
+    cellDiv.classList.remove("won");
   }
   gameIsLive = true;
 };
 
 const miniMax = () => {
   const board = [];
-  const cellDivs = document.querySelectorAll('.game-cell');
+  const cellDivs = document.querySelectorAll(".game-cell");
   for(let i = 0; i < 9; i++)
   {
     board.push(cellDivs[i].classList[1]);
@@ -120,14 +120,14 @@ const miniMax = () => {
   let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   for(let i = 0; i < 9; i++)
   {
-    if(board[i] != 'x' && board[i] != 'o'){
-      board[i] == 'o';
+    if(board[i] != "x" && board[i] != "o"){
+      board[i] == "o";
       if(miniMaxVictoryCheck(board)) {
         return 1;
       } else {
         move_outcomes[i] = minValue([...board]);
       }
-      board[i] = '';
+      board[i] = "";
     } else {
       board[i] = -2;
     }
@@ -149,14 +149,14 @@ function minValue(board) {
   let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   for(let i = 0; i < 9; i++)
   {
-    if(board[i] != 'x' && board[i] != 'o'){
-      board[i] == 'x';
+    if(board[i] != "x" && board[i] != "o"){
+      board[i] == "x";
       if(miniMaxVictoryCheck(board)) {
         return -1;
       } else {
         move_outcomes[i] = maxValue([...board]);
       }
-      board[i] = '';
+      board[i] = "";
     } else {
       board[i] = 2
     }
@@ -177,14 +177,14 @@ function maxValue(board) {
   let move_outcomes = [0, 0, 0, 0, 0, 0, 0, 0, 0];
   for(let i = 0; i < 9; i++)
   {
-    if(board[i] != 'x' && board[i] != 'o'){
-      board[i] == 'o';
+    if(board[i] != "x" && board[i] != "o"){
+      board[i] == "o";
       if(miniMaxVictoryCheck(board)) {
         return 1;
       } else {
         move_outcomes[i] = minValue([...board]);
       }
-      board[i] = '';
+      board[i] = "";
     } else {
       board[i] = -2;
     }
@@ -222,27 +222,27 @@ function miniMaxVictoryCheck(board) {
 const handleCellClick = (e) => {
   const classList = e.target.classList;
 
-  if (!gameIsLive || classList[1] === 'x' || classList[1] === 'o') {
+  if (!gameIsLive || classList[1] === "x" || classList[1] === "o") {
     return;
   }
 
   if (xIsNext) {
-    classList.add('x');
+    classList.add("x");
     checkGameStatus();
   } else {
-    classList.add('o');
+    classList.add("o");
     checkGameStatus();
   }
 };
 
 
 const eventListeners = () => {
-  const cellDivs = document.querySelectorAll('.game-cell');
-  const resetDiv = document.querySelector('.reset');
-  resetDiv.addEventListener('click', handleReset);
+  const cellDivs = document.querySelectorAll(".game-cell");
+  const resetDiv = document.querySelector(".reset");
+  resetDiv.addEventListener("click", handleReset);
 
   for (const cellDiv of cellDivs) {
-    cellDiv.addEventListener('click', handleCellClick)
+    cellDiv.addEventListener("click", handleCellClick)
   }
 }
 
