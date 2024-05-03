@@ -219,16 +219,23 @@ const handleCellClick = (e) => {
         classList.add("x");
         checkGameStatus();
         const mode = document.querySelector("input[name='mode']:checked").value;
-        if (mode === "Single Player") {
-            const aiMove = miniMax();
-            cellDivs[aiMove].classList.add("o");
-            checkGameStatus();
+        if (mode === "Single Player" && gameIsLive) {
+            AIMove();
         }
     } else {
         classList.add("o");
         checkGameStatus();
     }
 };
+
+function AIMove() {
+    const cellDivs = document.querySelectorAll(".game-cell");
+    const aiMove = miniMax();
+    if (aiMove != undefined) {
+        cellDivs[aiMove].classList.add("o");
+        checkGameStatus();
+    }
+}
 
 
 const eventListeners = () => {
