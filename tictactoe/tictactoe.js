@@ -233,6 +233,7 @@ const handleCellClick = (e) => {
 
 
 const eventListeners = () => {
+    document.getElementById("single_player").checked = true;
     const cellDivs = document.querySelectorAll(".game-cell");
     const resetDiv = document.querySelector(".reset");
     resetDiv.addEventListener("click", handleReset);
