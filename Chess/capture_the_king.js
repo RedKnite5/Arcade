@@ -21,6 +21,7 @@ function setupChess() {
         board.appendChild(row);
     }
     addPieces();
+    window.addEventListener('resize', resize_pieces, true);
 
     get("restart").onclick = restart;
 
@@ -129,6 +130,27 @@ function addChessPiece(squareid, piece) {
     }
 
     square.appendChild(image);
+}
+
+function resize_pieces(event) {
+    const board = get("board");
+    const size = get("a1").offsetWidth - 1;
+    for (const row of board.children) {
+        for (const square of row.children) {
+            if (square.hasChildNodes()) {
+                square.firstChild.height = size;
+                square.firstChild.width = size;
+            }
+        }
+    }
+    for (const piece of get("BCP").children) {
+        piece.height = size;
+        piece.width = size;
+    }
+    for (const piece of get("WCP").children) {
+        piece.height = size;
+        piece.width = size;
+    }
 }
 
 function allowDrop(event) {
