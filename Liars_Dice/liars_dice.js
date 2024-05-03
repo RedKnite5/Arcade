@@ -17,12 +17,12 @@ let p2Life = 0;
 let currBid = 1;
 let currPlayer = 1;
 
-var p1Disphand = [];
-var p2Disphand = [];
+const p1Disphand = [];
+const p2Disphand = [];
 
-var p1Displife = 0;
-var p2Displife = 0;
-var dispCurrBid = 0;
+let p1Displife = 0;
+let p2Displife = 0;
+let dispCurrBid = 0;
 
 addEventListener("load", initDispElements);
 addEventListener("load", restartGame);
@@ -86,24 +86,10 @@ function displayP2Hand() {
 }
 
 function numToDiceImage(n) {
-    switch(n){
-        case 0:
-            return "dice_0.png";
-        case 1:
-            return "dice_1.png";
-        case 2:
-            return "dice_2.png";
-        case 3:
-            return "dice_3.png";
-        case 4:
-            return "dice_4.png";
-        case 5:
-            return "dice_5.png";
-        case 6:
-            return "dice_6.png";
-        default:
-            return "dice_unknown.png";
+    if (0 <= n && n <= 6) {
+        return "dice_" + n.toString() + ".png";
     }
+    return "dice_unknown.png";
 }
 
 function displayP2Life() {
@@ -114,9 +100,9 @@ function displayP2Life() {
 function callLiar() {
     disableP1Inputs();
     displayP2Hand();
-    let currHand = scoreHand(p1Hand.concat(p2Hand));
-    let dispCurrHand = document.getElementById("dispCurr_hand");
-    let dispOutcome = document.getElementById("dispOutcome");
+    const currHand = scoreHand(p1Hand.concat(p2Hand));
+    const dispCurrHand = document.getElementById("dispCurr_hand");
+    const dispOutcome = document.getElementById("dispOutcome");
     let nextPlayer;
     dispCurrHand.textContent = "Actual Hand: " + handToString(currHand);
     if(currHand >= currBid && currPlayer === 1 || currHand < currBid && currPlayer === 2) {
@@ -138,9 +124,9 @@ function p1Move() {
 }
 
 function p2Move() {
-    let check = randInt();
-    let temp = [...p2Hand];
-    let p2Score = scoreHand(temp);
+    const check = randInt();
+    const temp = [...p2Hand];
+    const p2Score = scoreHand(temp);
     console.log("p2 score = ", p2Score);
     if ((check <= 2 && currBid > p2Score) || currBid == 6) {
         displayP2Response(1);
@@ -196,9 +182,10 @@ function newHand(nextPlayer) {
 
 function scoreHand(hand) {
     hand.sort();
-    let numMatch = [0, 0, 0, 0, 0, 0, 0];
+    const numMatch = [0, 0, 0, 0, 0, 0, 0];
     numMatch[hand[0]]++;
-    let maxMatch = 1, secondMatch = 1;
+    let maxMatch = 1
+    let secondMatch = 1;
     for(let i = 1; i < hand.length; i++) {
         if(hand[i] > 0) {
             numMatch[hand[i]]++;
@@ -255,7 +242,7 @@ function handToString(h) {
 }
 
 function displayP2Response(r) {
-    let p2Response = document.getElementById("p2_response");
+    const p2Response = document.getElementById("p2_response");
     if(r == 0) {
         p2Response.textContent = handToString(currBid + 1);
     } else {
@@ -264,7 +251,7 @@ function displayP2Response(r) {
 }
 
 function clearP2_Response() {
-    let p2Response = document.getElementById("p2_response");
+    const p2Response = document.getElementById("p2_response");
     p2Response.textContent = "\r\n";
 }
 
@@ -281,8 +268,8 @@ function updateBidText() {
 }
 
 function clearRoundEndText() {
-    let dispCurrHand = document.getElementById("dispCurr_hand");
-    let dispOutcome = document.getElementById("dispOutcome");
+    const dispCurrHand = document.getElementById("dispCurr_hand");
+    const dispOutcome = document.getElementById("dispOutcome");
     dispOutcome.textContent = "";
     dispCurrHand.textContent = "";
 }
