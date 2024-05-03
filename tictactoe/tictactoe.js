@@ -223,7 +223,6 @@ const handleCellClick = (e) => {
             const aiMove = miniMax();
             cellDivs[aiMove].classList.add("o");
             checkGameStatus();
-            console.log("aiMove: ", aiMove);
         }
     } else {
         classList.add("o");
