@@ -242,6 +242,11 @@ const eventListeners = () => {
 
   for (const cellDiv of cellDivs) {
     cellDiv.addEventListener("click", handleCellClick)
+    cellDiv.onkeydown = function (e) {
+      if (e.which === 13) {
+        cellDiv.click();
+      }
+    }
   }
 }
 
